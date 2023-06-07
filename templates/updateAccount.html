@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>update</title>
+		<link rel="stylesheet" href="/static/style.css">
+	</head>
+	<body bgcolor="#e6ffee">
+		<div class="one">
+			<div class="two">
+				<h1>Side Bar</h1>
+				<ul>
+					<li><a href="{{url_for('logout')}}">Log out</a></li>
+				</ul>
+			</div>
+			<div class="content" align="center">
+				<div class="topbar">
+					<h2>Welcome!! You are in Update Page!! </h2>
+				</div></br></br>
+				<div class="contentbar">
+				<h1>Fill Your Details to Update</h1></br>
+			<form action="{{ url_for('update_account') }}" method="post" autocomplete="off">
+					<div class="msg">{{ msg }}</div>
+
+					<input type="text" name="five" placeholder="Enter Your Username" class="textbox" id="five" required></br></br>
+					<input type="text" name="one" placeholder="Enter Your Name" class="textbox" id="one" required></br></br>
+					<input type="number" name="two" placeholder="Enter Your Phone Number" class="textbox" id="two" required></br></br>
+					<input type="text" name="three" placeholder="Enter Your Address" class="textbox" id="three" required></br></br>
+					<input type="email" name="four" placeholder="Enter Your Email" class="textbox" id="four" required></br></br>
+					<input type="password" name="six" placeholder="Enter Your Password" class="textbox" id="six" required></br></br>
+
+					<input type="submit" class="btn" value="Update">
+			</form>
+				</div>
+
+			</div>
+		</div>
+	</body>
+</html>

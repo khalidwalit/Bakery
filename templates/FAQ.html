@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Cake Template">
+    <meta name="keywords" content="Cake, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FAQ</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/static/cake-main/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/static/cake-main/css/flaticon.css" type="text/css">
+    <link rel="stylesheet" href="/static/cake-main/css/barfiller.css" type="text/css">
+    <link rel="stylesheet" href="/static/cake-main/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/static/cake-main/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/static/cake-main/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/static/cake-main/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/static/cake-main/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/static/cake-main/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/static/cake-main/css/style.css" type="text/css">
+</head>
+
+<body>
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__cart">
+            <div class="offcanvas__cart__links">
+                <a href="#" class="search-switch"><img src="/static/cake-main/img/icon/search.png" alt=""></a>
+                <a href="#"><img src="/static/cake-main/icon/heart.png" alt=""></a>
+            </div>
+            <div class="offcanvas__cart__item">
+                <a href="#"><img src="/static/cake-main/img/icon/cart.png" alt=""> <span>0</span></a>
+                <div class="cart__price">Cart: <span>RM 0.00</span></div>
+            </div>
+        </div>
+        <div class="offcanvas__logo">
+            <a href="./index.html"><img src="/static/cake-main/img/logo.png" alt=""></a>
+        </div>
+                <li><a href="{{url_for('customer')}}">Customer</a></li>
+                <li><a href="{{url_for('admin')}}">Admin</a> </li>
+            </ul>
+        </div>
+    </div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="header__top__inner">
+                            <div class="header__top__left">
+                                <ul>
+                                    <li><a href="{{url_for('customer')}}">Customer </a> </li>
+                                     <li><a href="{{url_for('admin')}}">Admin</a> </li>
+                                </ul>
+                            </div>
+                            <div class="header__logo">
+                                <a href="./index.html"><img src="{{url_for('static', filename ='BTFlogo.png')}}" style="width:40px;" class="rounded-pill" alt=""></a>
+                                 <h4>BalqistheFoodie</h4>
+                            </div>
+                            <div class="header__top__right">
+                                <div class="header__top__right__links">
+                                    <a href="#" class="search-switch"><img src="/static/cake-main/img/icon/search.png" alt=""></a>
+                                    <a href="#"><img src="/static/cake-main/img/icon/heart.png" alt=""></a>
+                                </div>
+                                <div class="header__top__right__cart">
+                                    <a href="#"><img src="/static/cake-main/img/icon/cart.png" alt=""> <span>0</span></a>
+                                    <div class="cart__price">Cart: <span>RM0.00</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="canvas__open"><i class="fa fa-bars"></i></div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            <li><a href="{{url_for('index')}}">Home</a></li>
+                            <li><a href="{{url_for('about')}}">About</a></li>
+                            <li><a href="{{url_for('product')}}">Product</a></li>
+                            <li class="active"><a href="{{url_for('faq')}}">FAQ</a></li>
+                            <li><a href="{{url_for('dashboard')}}">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+
+</body>
+</html>
