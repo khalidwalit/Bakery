@@ -1,12 +1,13 @@
 from MySQLdb._mysql import connection
 import re
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for, flash
 import MySQLdb
 from flask_mysqldb import MySQL
+
 import mysql.connector
 from mysql.connector import cursor
 import MySQLdb.cursors
-
+from werkzeug.exceptions import abort
 
 app = Flask(__name__)
 app.secret_key = "1234353234"
@@ -49,6 +50,16 @@ def about():
     return render_template('about.html')
 
 
+@app.route('/cake')
+def cake():
+    return render_template('cakes.html')
+
+
+@app.route('/dessert')
+def dessert():
+    return render_template('dessert.html')
+
+
 @app.route('/create_order')
 def create_order():
     return render_template('createOrder.html')
@@ -61,12 +72,12 @@ def view_order():
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template("dashboard.html")
-
-
-@app.route('/product')
-def product():
-    return render_template('productpages.html')
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is logged_in show them the dashboard
+        return render_template('dashboard.html', adminusername=session['adminUsername'])
+    # User is not loggedin redirect to login page
+    return redirect(url_for('admin'))
 
 
 @app.route('/faq')
@@ -77,16 +88,6 @@ def faq():
 @app.route('/index_product')
 def index_product():
     return render_template('indexProduct.html')
-
-
-@app.route('/create_product')
-def create_product():
-    return render_template('createProduct.html')
-
-
-@app.route('/update_product')
-def update_product():
-    return render_template('updateProduct.html')
 
 
 @app.route('/create_sales')
@@ -139,8 +140,8 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == "POST":
-        if "five" in request.form and "one" in request.form and "two" in request.form and "three" in request.form and\
-              "four" in request.form and "six" in request.form:
+        if "five" in request.form and "one" in request.form and "two" in request.form and "three" in request.form and \
+                "four" in request.form and "six" in request.form:
             username = request.form['five']
             custname = request.form['one']
             custphone = request.form['two']
@@ -173,27 +174,26 @@ def profile():
     return redirect(url_for('login'))
 
 
-# Define a route for the account update page
-@app.route("/update_account", methods=['GET', 'POST'])
-def update_account():
-    msg = ''
-    if 'loggedin' in session:
-        if request.method == 'POST' and 'five' in request.form and 'one' in request.form and 'two' in request.form and \
-                'three' in request.form and 'four' in request.form and 'six' in request.form:
-            username = request.form['five']
-            custname = request.form['one']
-            custphone = request.form['two']
-            custaddress = request.form['three']
-            custemail = request.form['four']
-            custpassword = request.form['six']
-            cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM logininfo WHERE username = %s', (session['username'], ))
-            account = cursor.fetchone()
-            cursor.execute('UPDATE logininfo SET username =% s,custName =%s, custPhone =%s, custAddress =%s, \
-                custEmail =%s, custPassword =%s', (username, custname, custphone, custaddress, custemail, custpassword, ))
-            db.connection.commit()
-            msg = 'You have successfully updated !'
-        return render_template("updateAccount.html", msg=msg)
+@app.route('/update', methods=['POST', 'GET'])
+def update():
+
+    if request.method == 'POST':
+        id_data = request.form['id']
+        username = request.form['username']
+        custname = request.form['custName']
+        custphone = request.form['custPhone']
+        custaddress = request.form['custAddress']
+        custemail = request.form['custEmail']
+        custpassword = request.form['custPassword']
+        cur = db.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur.execute("""
+               UPDATE logininfo
+               SET username=%s, custName=%s, custPhone=%s, custAddress=%s, custEmail=%s, custPassword =%s
+               WHERE id=%s
+            """, (username, custname, custphone, custaddress, custemail, custpassword, id_data))
+        flash("Data Updated Successfully")
+        db.connection.commit()
+        return redirect(url_for('update'))
 
 
 @app.route('/login_admin', methods=['GET', 'POST'])
@@ -207,14 +207,14 @@ def login_admin():
         adminpassword = request.form['adminPassword']
         # Check if account exists using MySQL
         cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM admin WHERE adminUsername = %s AND adminPassword = %s', (adminusername,
-                                                                                               adminpassword,))
+        cursor.execute('SELECT * FROM login.admin WHERE adminUsername = %s AND adminPassword = %s',
+                       (adminusername, adminpassword,))
         # Fetch one record and return result
         admin = cursor.fetchone()
         # If account exists in accounts table in out database
         if admin:
             # Create session data, we can access this data in other routes
-            session['loggedin'] = True
+            session['logged_in'] = True
             session['adminID'] = admin['adminID']
             session['adminUsername'] = admin['adminUsername']
             # Redirect to home page
@@ -260,15 +260,15 @@ def register_admin():
 @app.route('/profile_admin')
 def profile_admin():
     # Check if user is loggedin
-    if 'loggedin' in session:
+    if 'logged_in' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM admin WHERE adminID = %s', (session['adminID'],))
-        account = cursor.fetchone()
+        admin = cursor.fetchone()
         # Show the profile page with account info
-        return render_template('dashboard.html', account=account)
+        return render_template('dashboard.html', admin=admin)
     # User is not loggedin redirect to login page
-    return redirect(url_for('login_admin'))
+    return redirect(url_for('dashboard'))
 
 
 if __name__ == '__main__':

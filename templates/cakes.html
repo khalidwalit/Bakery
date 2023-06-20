@@ -92,7 +92,12 @@
                         <ul>
                             <li><a href="{{url_for('index')}}">Home</a></li>
                             <li><a href="{{url_for('about')}}">About</a></li>
-                            <li class="active"><a href="{{url_for('product')}}">Product</a></li>
+                             <li><a href="#">Product</a>
+                                <ul class="dropdown">
+                                    <li><a href="{{url_for('cake')}}">Cakes</a></li>
+                                    <li><a href="{{url_for('dessert')}}">Dessert</a></li>
+                                </ul>
+                            </li>
                             <li><a href="{{url_for('faq')}}">FAQ</a></li>
                             <li><a href="{{url_for('dashboard')}}">Contact</a></li>
                         </ul>
@@ -236,14 +241,14 @@
 <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="/static/cake-main/img/shop/product-1.jpg">
+                        <div class="product__item__pic set-bg" data-setbg="/static/cake5.png">
                             <div class="product__label">
-                                <span>Cupcake</span>
+                                <span>CAKE</span>
                             </div>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">Dozen Cupcakes</a></h6>
-                            <div class="product__item__price">$32.00</div>
+                            <h6><a href="#">Chocolate Cake 5-inch</a></h6>
+                            <div class="product__item__price">RM50.00</div>
                             <div class="cart_add">
                                 <a href="{{url_for('create_order')}}">Order Now</a>
                             </div>
@@ -253,14 +258,14 @@
 
 	<div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="/static/cake-main/img/shop/product-2.jpg">
+                        <div class="product__item__pic set-bg" data-setbg="/static/cake6.png">
                             <div class="product__label">
-                                <span>Cupcake</span>
+                                <span>CAKE</span>
                             </div>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">Cookies and Cream</a></h6>
-                            <div class="product__item__price">$30.00</div>
+                            <h6><a href="#">Chocolate Cake 6-inch</a></h6>
+                            <div class="product__item__price">RM60.00</div>
                             <div class="cart_add">
                                 <a href="{{url_for('create_order')}}">Order Now</a>
                             </div>
@@ -270,14 +275,14 @@
 
 	                <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="/static/cake-main/img/shop/product-3.jpg">
+                        <div class="product__item__pic set-bg" data-setbg="/static/cake7.png">
                             <div class="product__label">
-                                <span>Cupcake</span>
+                                <span>CAKE</span>
                             </div>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">Gluten Free Mini Dozen</a></h6>
-                            <div class="product__item__price">$31.00</div>
+                            <h6><a href="#">Chocolate Cake 6-inch</a></h6>
+                            <div class="product__item__price">RM60.00</div>
                             <div class="cart_add">
                                 <a href="{{url_for('create_order')}}">Order Now</a>
                             </div>
@@ -287,14 +292,14 @@
 
 	<div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="/static/cake-main/img/shop/product-4.jpg">
+                        <div class="product__item__pic set-bg" data-setbg="/static/cake8.png">
                             <div class="product__label">
-                                <span>Cupcake</span>
+                                <span>CAKE</span>
                             </div>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">Cookie Dough</a></h6>
-                            <div class="product__item__price">$25.00</div>
+                            <h6><a href="#">Vanilla Cake 5-inch</a></h6>
+                            <div class="product__item__price">RM50.00</div>
                             <div class="cart_add">
                                 <a href="{{url_for('create_order')}}">Order Now</a>
                             </div>
@@ -304,31 +309,46 @@
 
 	 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="/static/cake-main/img/shop/product-5.jpg">
+                        <div class="product__item__pic set-bg" data-setbg="/static/cake9.png">
                             <div class="product__label">
-                                <span>Cupcake</span>
+                                <span>CAKE</span>
                             </div>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">Vanilla Salted Caramel</a></h6>
-                            <div class="product__item__price">$05.00</div>
+                            <h6><a href="#">Vanilla Cake 5-inch</a></h6>
+                            <div class="product__item__price">50.00</div>
                             <div class="cart_add">
                                 <a href="{{url_for('create_order')}}">Order Now</a>
                             </div>
                         </div>
                     </div>
                 </div>
-
-	 <div class="col-lg-3 col-md-6 col-sm-6">
+    <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="/static/cake-main/img/shop/product-6.jpg">
+                        <div class="product__item__pic set-bg" data-setbg="/static/cake10.png">
                             <div class="product__label">
-                                <span>Cupcake</span>
+                                <span>CAKE</span>
                             </div>
                         </div>
                         <div class="product__item__text">
-                            <h6><a href="#">German Chocolate</a></h6>
-                            <div class="product__item__price">$14.00</div>
+                            <h6><a href="#">Vanilla Cake 4-inch</a></h6>
+                            <div class="product__item__price">RM20.00</div>
+                            <div class="cart_add">
+                                <a href="{{url_for('create_order')}}">Order Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="/static/cake11.png">
+                            <div class="product__label">
+                                <span>CAKE</span>
+                            </div>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">Vanilla Cake 5-inch</a></h6>
+                            <div class="product__item__price">RM50.00</div>
                             <div class="cart_add">
                                 <a href="{{url_for('create_order')}}">Order Now</a>
                             </div>
