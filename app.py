@@ -88,6 +88,50 @@ def create_product():
 def update_product():
     return render_template('updateProduct.html')
 
+@app.route('/recommend')
+def recommend():
+    # Define the recipe data (example)
+    recipes = [
+        {
+            "recipe_id": 1,
+            "recipe_name": "Chocolate Cake",
+            "ingredients": [
+                {"name": "Flour", "quantity": "200g"},
+                {"name": "Sugar", "quantity": "150g"},
+                {"name": "Eggs", "quantity": "2 pcs"},
+                {"name": "Butter", "quantity": "100g"},
+                {"name": "Cocoa Powder", "quantity": "50g"},
+                {"name": "Milk", "quantity": "120ml"},
+                {"name": "Nuts", "quantity": "50g"}
+            ]
+        },
+        {
+            "recipe_id": 2,
+            "recipe_name": "Cheesecake",
+            "ingredients": [
+                {"name": "Cream Cheese", "quantity": "250g"},
+                {"name": "Icing Sugar", "quantity": "60g"},
+                {"name": "Flour", "quantity": "5g"},
+                {"name": "Eggs", "quantity": "2 pcs"},
+                {"name": "Whipped Cream", "quantity": "150g"}
+            ]
+        },
+        {
+            "recipe_id": 3,
+            "recipe_name": "Pancakes",
+            "ingredients": [
+                {"name": "Flour", "quantity": "150g"},
+                {"name": "Sugar", "quantity": "2 tbsp"},
+                {"name": "Baking Powder", "quantity": "1 tsp"},
+                {"name": "Salt", "quantity": "1/4 tsp"},
+                {"name": "Eggs", "quantity": "1 pcs"},
+                {"name": "Milk", "quantity": "200ml"},
+                {"name": "Butter", "quantity": "2 tbsp"}
+            ]
+        }
+    ]
+    return "test"
+
 
 @app.route('/create_sales')
 def create_sales():
