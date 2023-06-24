@@ -92,7 +92,12 @@
                         <ul>
                             <li><a href="{{url_for('index')}}">Home</a></li>
                             <li><a href="{{url_for('about')}}">About</a></li>
-                            <li><a href="{{url_for('product')}}">Product</a></li>
+                             <li><a href="#">Product</a>
+                                <ul class="dropdown">
+                                    <li><a href="{{url_for('cake')}}">Cakes</a></li>
+                                    <li><a href="{{url_for('dessert')}}">Dessert</a></li>
+                                </ul>
+                            </li>
                             <li><a href="{{url_for('faq')}}">FAQ</a></li>
                             <li><a href="{{url_for('dashboard')}}">Contact</a></li>
                         </ul>

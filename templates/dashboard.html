@@ -21,6 +21,15 @@
       background-color: #FFC0CB;
       }
     </style>
+    {% extends 'layoutAdmin.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h2>Home Page</h2>
+<p>Welcome back, {{ adminUsername }}!</p>
+{% endblock %}
+
 </head>
 
 <body id="reportsPage">
