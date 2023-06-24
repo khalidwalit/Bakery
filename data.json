@@ -1,14 +1,15 @@
 {
   "Burn Cheesecake": {
-    // Cake
+    //recipe name
     "Cream cheese": "250g",
     "Icing sugar": "60g",
     "Flour": "5g",
-    "Eggs": "2",
+    "Egg": "2",
     "Whipped cream": "150g"
   },
   "Vanilla Sponge Cake": {
-    "Egg whites": "4",
+    //recipe name
+    "Egg": "4",
     "Vanilla": "1 tsp",
     "Sugar": "120g",
     "Flour": "120g",
@@ -18,6 +19,7 @@
     "Vanilla": "1/2 tsp"
   },
   "Pandan Gula Melaka": {
+    //recipe name
     "Cake flour": "200g",
     "Butter": "125g",
     "Salt": "1/2 tsp",
@@ -31,6 +33,7 @@
     "Sugar": "1 tsp"
   },
   "Chocolate Moist Cake": {
+    //recipe name
     "Self-rising flour": "25g",
     "Eggs": "2",
     "Sugar": "200g",
@@ -42,6 +45,7 @@
     "Baking soda": "1 tsp"
   },
   "Rainbow Cake": {
+    //recipe name
     "Unsalted butter": "250g",
     "Sugar": "225g",
     "Eggs": "3",
