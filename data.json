@@ -1,0 +1,53 @@
+{
+  "Burn Cheesecake": {
+    // Cake
+    "Cream cheese": "250g",
+    "Icing sugar": "60g",
+    "Flour": "5g",
+    "Eggs": "2",
+    "Whipped cream": "150g"
+  },
+  "Vanilla Sponge Cake": {
+    "Egg whites": "4",
+    "Vanilla": "1 tsp",
+    "Sugar": "120g",
+    "Flour": "120g",
+    "Salt": "1/2 tsp",
+    "Oil": "30g",
+    "Milk": "40g",
+    "Vanilla": "1/2 tsp"
+  },
+  "Pandan Gula Melaka": {
+    "Cake flour": "200g",
+    "Butter": "125g",
+    "Salt": "1/2 tsp",
+    "Essence": "1/2 tsp",
+    "Caster sugar": "160g",
+    "Eggs": "2",
+    "Coconut milk": "75g",
+    "Water": "25g",
+    "Pandan leaves juice": "2 tsp",
+    "Gula Melaka sugar": "50g",
+    "Sugar": "1 tsp"
+  },
+  "Chocolate Moist Cake": {
+    "Self-rising flour": "25g",
+    "Eggs": "2",
+    "Sugar": "200g",
+    "Vanilla": "15g",
+    "Milk": "125ml",
+    "Oil": "83ml",
+    "Hot water": "83ml",
+    "Coffee": "1 tsp",
+    "Baking soda": "1 tsp"
+  },
+  "Rainbow Cake": {
+    "Unsalted butter": "250g",
+    "Sugar": "225g",
+    "Eggs": "3",
+    "Vanilla": "1 tsp",
+    "Baking powder": "2 tsp",
+    "Whole milk": "50g",
+    "Rainbow food coloring": "6 tsp"
+  }
+}
