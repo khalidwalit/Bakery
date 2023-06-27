@@ -60,6 +60,87 @@ def dessert():
     return render_template('dessert.html')
 
 
+def recommend():
+    # Define the recipe data (example)
+    recipes = [
+        {
+            "recipe_id": 1,
+            "recipe_name": "Burn Cheesecake",
+            "ingredients": [
+                {"name": "Cream Cheese", "quantity": "250g"},
+                {"name": "Icing Sugar", "quantity": "60g"},
+                {"name": "Flour", "quantity": "5g"},
+                {"name": "Eggs", "quantity": "2"},
+                {"name": "Whipped Cream", "quantity": "150g"},
+            ]
+        },
+        {
+            "recipe_id": 2,
+            "recipe_name": "Vanilla Sponge Cake",
+            "ingredients": [
+                {"name": "Egg Whites", "quantity": "4"},
+                {"name": "Vanilla", "quantity": "1 tsp"},
+                {"name": "Sugar", "quantity": "120g"},
+                {"name": "Flour", "quantity": "120g"},
+                {"name": "Oil ", "quantity": "30g"},
+                {"name": "Milk ", "quantity": "40g"},
+                {"name": "Vanilla ", "quantity": "1/2 tsp"},
+            ]
+        },
+        {
+            "recipe_id": 3,
+            "recipe_name": "Pandan Gula Melaka",
+            "ingredients": [
+                {"name": "Cake Flour", "quantity": "200g"},
+                {"name": "Butter", "quantity": "125g"},
+                {"name": "Salt ", "quantity": "1/2 tsp"},
+                {"name": "Essence", "quantity": "1/2 tsp"},
+                {"name": "Caster Sugar", "quantity": "160g"},
+                {"name": "Eggs", "quantity": "2"},
+                {"name": "Coconut Milk", "quantity": "75g"},
+                {"name": "Water", "quantity": "25g"},
+                {"name": "Pandan Leaves Juice", "quantity": " 2 tsp"},
+                {"name": "Gula Melaka", "quantity": "50g"},
+                {"name": "Sugar", "quantity": "1 tsp"},
+            ]
+
+        },
+        {
+            "recipe_id": 4,
+            "recipe_name": "Chocolate Moist Cake",
+            "ingredients": [
+                {"name": "Self-Rising Flour", "quantity": "25g"},
+                {"name": "Eggs", "quantity": "2"},
+                {"name": "Sugar", "quantity": "200g"},
+                {"name": "Vanilla", "quantity": "15g"},
+                {"name": "Milk ", "quantity": "125ml"},
+                {"name": "Oil ", "quantity": "83ml"},
+                {"name": "Hot Water ", "quantity": "83ml"},
+                {"name": "Coffee ", "quantity": "1 tsp"},
+                {"name": "Baking Soda ", "quantity": "1 tsp"},
+            ]
+        },
+        {
+            "recipe_id": 5,
+            "recipe_name": "Rainbow Cake",
+            "ingredients": [
+                {"name": "Unsalted Butter", "quantity": "250g"},
+                {"name": "Sugar", "quantity": "225g"},
+                {"name": "Eggs", "quantity": "3"},
+                {"name": "Vanilla", "quantity": " 1 tsp"},
+                {"name": "Baking Powder ", "quantity": "2 tsp"},
+                {"name": "Whole Milk ", "quantity": "50g"},
+                {"name": "Rainbow Food Coloring ", "quantity": "6 tsp"},
+            ]
+        },
+    ]
+    return recipes
+
+
+recipes = recommend()
+print(recipes)
+
+
 @app.route('/create_order')
 def create_order():
     return render_template('createOrder.html')
@@ -106,15 +187,15 @@ def login():
         custpassword = request.form['custPassword']
         # Check if account exists using MySQL
         cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM logininfo WHERE username = %s AND custPassword = %s', (username, custpassword,))
+        cursor.execute('SELECT * FROM customer WHERE username = %s AND custPassword = %s', (username, custpassword,))
         # Fetch one record and return result
-        logininfo = cursor.fetchone()
+        customer= cursor.fetchone()
         # If account exists in accounts table in out database
-        if logininfo:
+        if customer:
             # Create session data, we can access this data in other routes
             session['loggedin'] = True
-            session['custID'] = logininfo['custID']
-            session['username'] = logininfo['username']
+            session['custID'] = customer['custID']
+            session['username'] = customer['username']
             # Redirect to home page
             return redirect(url_for('home'))
         else:
@@ -150,7 +231,7 @@ def register():
             custpassword = request.form['six']
 
             cur = db.connection.cursor(MySQLdb.cursors.DictCursor)
-            cur.execute("INSERT INTO login.logininfo(username,custName,custPhone, custAddress, custEmail, "
+            cur.execute("INSERT INTO login.customer(username,custName,custPhone, custAddress, custEmail, "
                         "custPassword)VALUES(%s,%s,%s,%s,%s,%s)", (username, custname, custphone, custaddress,
                                                                    custemail, custpassword))
             db.connection.commit()
@@ -166,7 +247,7 @@ def profile():
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM logininfo WHERE custID = %s', (session['custID'],))
+        cursor.execute('SELECT * FROM customer WHERE custID = %s', (session['custID'],))
         account = cursor.fetchone()
         # Show the profile page with account info
         return render_template('profile.html', account=account)
@@ -174,26 +255,27 @@ def profile():
     return redirect(url_for('login'))
 
 
-@app.route('/update', methods=['POST', 'GET'])
-def update():
-
-    if request.method == 'POST':
-        id_data = request.form['id']
-        username = request.form['username']
-        custname = request.form['custName']
-        custphone = request.form['custPhone']
-        custaddress = request.form['custAddress']
-        custemail = request.form['custEmail']
-        custpassword = request.form['custPassword']
-        cur = db.connection.cursor(MySQLdb.cursors.DictCursor)
-        cur.execute("""
-               UPDATE logininfo
-               SET username=%s, custName=%s, custPhone=%s, custAddress=%s, custEmail=%s, custPassword =%s
-               WHERE id=%s
-            """, (username, custname, custphone, custaddress, custemail, custpassword, id_data))
-        flash("Data Updated Successfully")
-        db.connection.commit()
-        return redirect(url_for('update'))
+# Define a route for the account update page
+@app.route("/update_account", methods=['GET', 'POST'])
+def update_account():
+    msg = ''
+    if 'loggedin' in session:
+        if request.method == 'POST' and 'five' in request.form and 'one' in request.form and 'two' in request.form and \
+                'three' in request.form and 'four' in request.form and 'six' in request.form:
+            username = request.form['five']
+            custname = request.form['one']
+            custphone = request.form['two']
+            custaddress = request.form['three']
+            custemail = request.form['four']
+            custpassword = request.form['six']
+            cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM customer WHERE username = %s', (session['username'], ))
+            account = cursor.fetchone()
+            cursor.execute('UPDATE customer SET username =% s,custName =%s, custPhone =%s, custAddress =%s, \
+                custEmail =%s, custPassword =%s', (username, custname, custphone, custaddress, custemail, custpassword, ))
+            db.connection.commit()
+            msg = 'You have successfully updated !'
+        return render_template("updateAccount.html", msg=msg)
 
 
 @app.route('/login_admin', methods=['GET', 'POST'])
