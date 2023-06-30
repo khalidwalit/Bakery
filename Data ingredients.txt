@@ -1,5 +1,28 @@
+Size 8 inch:
 (Burn Cheesecake= Cream cheese 250g, Icing sugar 60g, Flour 5g, 2 egg, Whipped cream 150g)
 (Vanilla Sponge Cake = Egg white 4, vanilla 1tsp, 120g sugar, 120g flour, 1/2 tsp salt, 30g oil, 40g milk, 1/2 tsp vanilla)
 (Pandan Gula Melaka = Cake Flour 200g, Butter 125g, Salt 1/2 tsp, Essence 1/2 tsp, Caster Sugar 160g, Egg 2, Coconut Milk 75g, Water 25g, Juice Pandan Leaves 2 tsp, Malacca sugar 50g, Sugar 1tsp)
 (Chocolate Moist Cake = Flour rises itself 25g, Egg 2, Sugar 200g, Vanilla 15g, Milk 125ml, Oil 83ml, 83ml hot water, 1 tsp coffee, 1 tsp soda)
 (Rainbow Cake = Unsalted butter 250g, Sugar 225g, Eggs 3, Vanilla 1tsp, Baking powder 2 tsp, Whole Milk 50g, Rainbow Colouring 6 tsp) 
+
+
+Size 6 inch:
+(Burn Cheesecake= Cream cheese 150g, Icing sugar 30g, Flour 3g, 1 egg, Whipped cream 75g)
+(Vanilla Sponge Cake = Egg white 2, vanilla 1tsp, 60g sugar, 60g flour, 1/2 tsp salt, 15g oil, 20g milk, 1/2 tsp vanilla)
+(Pandan Gula Melaka = Cake Flour 100g, Butter 63g, Salt 1/2 tsp, Essence 1/2 tsp, Caster Sugar 80g, Egg 1, Coconut Milk 38 g, Water 13 g, Juice Pandan Leaves 2 tsp, Malacca sugar 25g, Sugar 1tsp)
+(Chocolate Moist Cake = Flour rises itself 13g, Egg 1, Sugar 100g, Vanilla 8g, Milk 63 ml, Oil 42ml, 42ml hot water, 1/2 tsp coffee, 1/2 tsp soda)
+(Rainbow Cake = Unsalted butter 150g, Sugar 113g, Eggs 2, Vanilla 1/2tsp, Baking powder 1 tsp, Whole Milk 25g, Rainbow Colouring 6 tsp) 
+
+Size 5 inch:
+(Burn Cheesecake= Cream cheese 75g, Icing sugar 15g, Flour 2g, 1 egg, Whipped cream 38g)
+(Vanilla Sponge Cake = Egg white 2, vanilla 1tsp, 30g sugar, 30g flour, 1/2 tsp salt, 8g oil, 10g milk, 1/2 tsp vanilla)
+(Pandan Gula Melaka = Cake Flour 100g, Butter 32g, Salt 1/2 tsp, Essence 1/2 tsp, Caster Sugar 40g, Egg 1, Coconut Milk 19 g, Water 7 g, Juice Pandan Leaves 2 tsp, Malacca sugar 13g, Sugar 1tsp)
+(Chocolate Moist Cake = Flour rises itself 7g, Egg 1, Sugar 50g, Vanilla 4g, Milk 32 ml, Oil 21ml, 21ml hot water, 1/2 tsp coffee, 1/2 tsp soda)
+(Rainbow Cake = Unsalted butter 75g, Sugar 57g, Eggs 2, Vanilla 1/2tsp, Baking powder 1 tsp, Whole Milk 13g, Rainbow Colouring 6 tsp) 
+
+Size 4 inch:
+(Burn Cheesecake= Cream cheese 38g, Icing sugar 8g, Flour 1g, 1 egg, Whipped cream 19g)
+(Vanilla Sponge Cake = Egg white 1, vanilla 1/2tsp, 60g sugar, 60g flour, 1/2 tsp salt, 15g oil, 5g milk, 1/2 tsp vanilla)
+(Pandan Gula Melaka = Cake Flour 50g, Butter 16g, Salt 1/2 tsp, Essence 1/2 tsp, Caster Sugar 20g, Egg 1, Coconut Milk 10 g, Water 4g, Juice Pandan Leaves 1 tsp, Malacca sugar 7g, Sugar 1/2tsp)
+(Chocolate Moist Cake = Flour rises itself 13g, Egg 1, Sugar 25g, Vanilla 2g, Milk 16 ml, Oil 11ml, 11ml hot water, 1/2 tsp coffee, 1/2 tsp soda)
+(Rainbow Cake = Unsalted butter 38g, Sugar 29g, Eggs 1, Vanilla 1/2tsp, Baking powder 1 tsp, Whole Milk 7g, Rainbow Colouring 6 tsp) 
