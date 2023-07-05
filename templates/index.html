@@ -95,11 +95,10 @@
                             <li><a href="#">Product</a>
                                 <ul class="dropdown">
                                     <li><a href="{{url_for('cake')}}">Cakes</a></li>
-                                    <li><a href="{{url_for('dessert')}}">Dessert</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{url_for('faq')}}">FAQ</a></li>
-                            <li><a href="{{url_for('dashboard')}}">Contact</a></li>
+                            <li><a href="{{url_for('contact')}}">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -117,7 +116,7 @@
                         <div class="col-lg-8">
                             <div class="hero__text">
                                 <h2>Making your life sweeter one bite at a time!</h2>
-                                <a href="" class="primary-btn">Our cakes</a>
+                                <a href="{{url_for('cake')}}" class="primary-btn">Our cakes</a>
                             </div>
                         </div>
                     </div>
@@ -129,7 +128,7 @@
                         <div class="col-lg-8">
                             <div class="hero__text">
                                 <h2>Making your life sweeter one bite at a time!</h2>
-                                <a href="" class="primary-btn">Our cakes</a>
+                                <a href="{{url_for('cake')}}" class="primary-btn">Our cakes</a>
                             </div>
                         </div>
                     </div>
@@ -175,53 +174,6 @@
         </div>
     </section>
     <!-- About Section End -->
-
-    <!-- Categories Section Begin -->
-    <div class="categories">
-        <div class="container">
-            <div class="row">
-                <div class="categories__slider owl-carousel">
-                    <div class="categories__item">
-                        <div class="categories__item__icon">
-                            <span class="flaticon-029-cupcake-3"></span>
-                            <h5>Cupcake</h5>
-                        </div>
-                    </div>
-                    <div class="categories__item">
-                        <div class="categories__item__icon">
-                            <span class="flaticon-034-chocolate-roll"></span>
-                            <h5>Butter</h5>
-                        </div>
-                    </div>
-                    <div class="categories__item">
-                        <div class="categories__item__icon">
-                            <span class="flaticon-005-pancake"></span>
-                            <h5>Red Velvet</h5>
-                        </div>
-                    </div>
-                    <div class="categories__item">
-                        <div class="categories__item__icon">
-                            <span class="flaticon-030-cupcake-2"></span>
-                            <h5>Biscuit</h5>
-                        </div>
-                    </div>
-                    <div class="categories__item">
-                        <div class="categories__item__icon">
-                            <span class="flaticon-006-macarons"></span>
-                            <h5>Donut</h5>
-                        </div>
-                    </div>
-                    <div class="categories__item">
-                        <div class="categories__item__icon">
-                            <span class="flaticon-006-macarons"></span>
-                            <h5>Cupcake</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Categories Section End -->
 
     <!-- Instagram Section Begin -->
     <section class="instagram spad">
@@ -283,9 +235,7 @@
                     <div class="footer__widget">
                         <h6>WORKING HOURS</h6>
                         <ul>
-                            <li>Monday - Friday: 08:00 am – 08:30 pm</li>
-                            <li>Saturday: 10:00 am – 16:30 pm</li>
-                            <li>Sunday: 10:00 am – 16:30 pm</li>
+                            <li>Monday - Sunday: 10:00 am – 11.59 pm</li>
                         </ul>
                     </div>
                 </div>
@@ -297,7 +247,7 @@
                         <div class="footer__social">
                             <a href="#"><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="https://www.instagram.com/balqisthefoodie/"><i class="fa fa-instagram"></i></a>
                             <a href="#"><i class="fa fa-youtube-play"></i></a>
                         </div>
                     </div>

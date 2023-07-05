@@ -96,11 +96,10 @@
                              <li><a href="#">Product</a>
                                 <ul class="dropdown">
                                     <li><a href="{{url_for('cake')}}">Cakes</a></li>
-                                    <li><a href="{{url_for('dessert')}}">Dessert</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{url_for('faq')}}">FAQ</a></li>
-                            <li><a href="{{url_for('dashboard')}}">Contact</a></li>
+                            <li><a href="{{url_for('contact')}}">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -135,7 +134,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="about__video set-bg" data-setbg="/static/cake-main/mg/about-video.jpg">
-                        <a href="https://www.instagram.com/reel/Coy8OKev_Z8/?utm_source=ig_web_copy_link&igshid=MzRlODBiNWFlZA=="
+                        <a href="{{url_for('static', filename ='BTFlogo.png')}}"
                         class="play-btn video-popup"><i class="fa fa-play"></i></a>
                     </div>
                 </div>
@@ -193,9 +192,7 @@
                     <div class="footer__widget">
                         <h6>WORKING HOURS</h6>
                         <ul>
-                            <li>Monday - Friday: 08:00 am – 08:30 pm</li>
-                            <li>Saturday: 10:00 am – 16:30 pm</li>
-                            <li>Sunday: 10:00 am – 16:30 pm</li>
+                            <li>Monday - Sunday: 10:00 am – 11.59 pm</li>
                         </ul>
                     </div>
                 </div>
@@ -207,7 +204,7 @@
                         <div class="footer__social">
                             <a href="#"><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="https://www.instagram.com/balqisthefoodie/"><i class="fa fa-instagram"></i></a>
                             <a href="#"><i class="fa fa-youtube-play"></i></a>
                         </div>
                     </div>
@@ -236,7 +233,6 @@
                         <ul>
                             <li><a href="#">Privacy Policy</a></li>
                             <li><a href="#">Terms & Conditions</a></li>
-                            <li><a href="#">Site Map</a></li>
                         </ul>
                     </div>
                 </div>
