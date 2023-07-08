@@ -105,28 +105,6 @@ def profile():
     return redirect(url_for('login'))
 
 
-@app.route("/update_account", methods=['GET', 'POST'])
-def update_account():
-    msg = ''
-    if 'loggedin' in session:
-        if request.method == 'POST' and 'five' in request.form and 'one' in request.form and 'two' in request.form and \
-                'three' in request.form and 'four' in request.form and 'six' in request.form:
-            username = request.form['five']
-            custname = request.form['one']
-            custphone = request.form['two']
-            custaddress = request.form['three']
-            custemail = request.form['four']
-            custpassword = request.form['six']
-            cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM customer WHERE username = %s', (session['username'], ))
-            account = cursor.fetchone()
-            cursor.execute('UPDATE customer SET username =% s,custName =%s, custPhone =%s, custAddress =%s, \
-                custEmail =%s, custPassword =%s', (username, custname, custphone, custaddress, custemail, custpassword, ))
-            db.connection.commit()
-            msg = 'You have successfully updated !'
-        return render_template("updateAccount.html", msg=msg)
-
-
 @app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
@@ -252,85 +230,31 @@ def contact():
     return render_template('contact.html')
 
 
+@app.route('/recommend')
 def recommend():
-    # Define the recipe data (example)
-    recipes = [
-        {
-            "recipe_id": 1,
-            "recipe_name": "Burn Cheesecake",
-            "ingredients": [
-                {"name": "Cream Cheese", "quantity": "250g"},
-                {"name": "Icing Sugar", "quantity": "60g"},
-                {"name": "Flour", "quantity": "5g"},
-                {"name": "Eggs", "quantity": "2"},
-                {"name": "Whipped Cream", "quantity": "150g"},
-            ]
-        },
-        {
-            "recipe_id": 2,
-            "recipe_name": "Vanilla Sponge Cake",
-            "ingredients": [
-                {"name": "Egg Whites", "quantity": "4"},
-                {"name": "Vanilla", "quantity": "1 tsp"},
-                {"name": "Sugar", "quantity": "120g"},
-                {"name": "Flour", "quantity": "120g"},
-                {"name": "Oil ", "quantity": "30g"},
-                {"name": "Milk ", "quantity": "40g"},
-                {"name": "Vanilla ", "quantity": "1/2 tsp"},
-            ]
-        },
-        {
-            "recipe_id": 3,
-            "recipe_name": "Pandan Gula Melaka",
-            "ingredients": [
-                {"name": "Cake Flour", "quantity": "200g"},
-                {"name": "Butter", "quantity": "125g"},
-                {"name": "Salt ", "quantity": "1/2 tsp"},
-                {"name": "Essence", "quantity": "1/2 tsp"},
-                {"name": "Caster Sugar", "quantity": "160g"},
-                {"name": "Eggs", "quantity": "2"},
-                {"name": "Coconut Milk", "quantity": "75g"},
-                {"name": "Water", "quantity": "25g"},
-                {"name": "Pandan Leaves Juice", "quantity": " 2 tsp"},
-                {"name": "Gula Melaka", "quantity": "50g"},
-                {"name": "Sugar", "quantity": "1 tsp"},
-            ]
+    cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        },
-        {
-            "recipe_id": 4,
-            "recipe_name": "Chocolate Moist Cake",
-            "ingredients": [
-                {"name": "Self-Rising Flour", "quantity": "25g"},
-                {"name": "Eggs", "quantity": "2"},
-                {"name": "Sugar", "quantity": "200g"},
-                {"name": "Vanilla", "quantity": "15g"},
-                {"name": "Milk ", "quantity": "125ml"},
-                {"name": "Oil ", "quantity": "83ml"},
-                {"name": "Hot Water ", "quantity": "83ml"},
-                {"name": "Coffee ", "quantity": "1 tsp"},
-                {"name": "Baking Soda ", "quantity": "1 tsp"},
-            ]
-        },
-        {
-            "recipe_id": 5,
-            "recipe_name": "Rainbow Cake",
-            "ingredients": [
-                {"name": "Unsalted Butter", "quantity": "250g"},
-                {"name": "Sugar", "quantity": "225g"},
-                {"name": "Eggs", "quantity": "3"},
-                {"name": "Vanilla", "quantity": " 1 tsp"},
-                {"name": "Baking Powder ", "quantity": "2 tsp"},
-                {"name": "Whole Milk ", "quantity": "50g"},
-                {"name": "Rainbow Food Coloring ", "quantity": "6 tsp"},
-            ]
-        },
-    ]
-    return recipes
+    try:
+        # Execute the SQL query
+        cursor.execute("""
+            SELECT p.productID, p.productName, p.productSize, i.ingredient_id, r.quantity, i.unit, i.ingredient_name
+            FROM product p
+            JOIN recipes r ON p.productID = r.productID
+            JOIN ingredients i ON r.ingredient_id = i.ingredient_id
+        """)
 
+        # Fetch all the rows
+        recommendations = cursor.fetchall()
 
-recipes = recommend()
-print(recipes)
+        return render_template('recommend.html', recommendations=recommendations)
+
+    except MySQLdb.Error as e:
+        print(f"Error: {e}")
+
+    finally:
+        cursor.close()
+
+    return "Error occurred. Please try again later."
 
 
 @app.route('/create_order')

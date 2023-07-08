@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recommendation</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recommendation</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Product Size</th>
+                <th>Ingredient ID</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+                <th>Ingredient Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recommendation in recommendations %}
+            <tr>
+                <td>{{ recommendation.productID }}</td>
+                <td>{{ recommendation.productName }}</td>
+                <td>{{ recommendation.productSize }}</td>
+                <td>{{ recommendation.ingredient_id }}</td>
+                <td>{{ recommendation.quantity }}</td>
+                <td>{{ recommendation.unit }}</td>
+                <td>{{ recommendation.ingredient_name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
