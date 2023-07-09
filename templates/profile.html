@@ -95,7 +95,6 @@
                              <li><a href="#">Product</a>
                                 <ul class="dropdown">
                                     <li><a href="{{url_for('cake')}}">Cakes</a></li>
-                                    <li><a href="{{url_for('dessert')}}">Dessert</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{url_for('faq')}}">FAQ</a></li>
@@ -133,13 +132,13 @@
         </tr>
         <tr>
             <td>Password:</td>
-            <td>{{ account['custPassword'] }}</td>
+            <td>*******</td>
         </tr>
     </table>
 </div>
 {% endblock %}
-<a href="{{url_for('update_account')}}" target="_blank">
+<a href="{{url_for('profile')}}" target="_blank">
     <input type="hidden" name="action" value="edit">
-     <button type="submit" class="btn btn-primary">Update</button></a>
+       <button type="submit" class="btn btn-primary">Update</button></a>
 </body>
 </html>
