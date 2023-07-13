@@ -258,6 +258,47 @@ def contact():
     return render_template('contact.html')
 
 
+def getAvailableIngredient():
+    cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute("""
+            SELECT * FROM ingredients
+        """)
+
+    available_ingredients = cursor.fetchall()
+    return  available_ingredients
+
+
+def filterRecipe(available_ingredients, products):
+    filtered_products = []
+    for product in products:
+        ingredients_required = product['ingredients_required']
+        available_ingredient_names = [ingredient['ingredient_name'] for ingredient in available_ingredients]
+        required_ingredient_names = [ingredient['ingredient_name'] for ingredient in ingredients_required]
+        if all(ingredient_name in available_ingredient_names for ingredient_name in required_ingredient_names):
+            for ingredient in ingredients_required:
+                for available_ingredient in available_ingredients:
+                    if (
+                            ingredient['ingredient_name'] == available_ingredient['ingredient_name']
+                            and ingredient['quantity'] <= available_ingredient['available_quantity']
+                    ):
+                        filtered_products.append(product)
+                        break
+                else:
+                    break
+    return filtered_products
+
+
+def requiredingredients(product):
+    ingredient = {
+        'ingredient_id': product['ingredient_id'],
+        'quantity': product['quantity'],
+        'unit': product['unit'],
+        'ingredient_name': product['ingredient_name']
+    }
+    return ingredient
+
+
 @app.route('/recommend')
 def recommend():
     cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -272,9 +313,25 @@ def recommend():
         """)
 
         # Fetch all the rows
-        recommendations = cursor.fetchall()
-
-        return render_template('recommend.html', recommendations=recommendations)
+        fetch_products = cursor.fetchall()
+        available_ingredients = getAvailableIngredient()
+        #required_ingredients =requiredingredients(product)
+        products = {}
+        for product in fetch_products:
+            product_id = product['productID']
+            if product_id not in products:
+                products[product_id] = {
+                    'productID': product['productID'],
+                    'productName': product['productName'],
+                    'productSize': product['productSize'],
+                    'ingredients_required': []
+                }
+            ingredient = requiredingredients(product)
+            products[product_id]['ingredients_required'].append(ingredient)
+        formatted_products = list(products.values())
+        recommend_product = filterRecipe(available_ingredients, formatted_products)
+        print('ready', recommend_product)
+        return render_template('recommend.html', recommendations=recommend_product)
 
     except MySQLdb.Error as e:
         print(f"Error: {e}")
