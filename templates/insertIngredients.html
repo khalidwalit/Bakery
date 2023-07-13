@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert Ingredients</title>
+</head>
+<body>
+<h4>Insert Ingredients</h4>
+<form action="{{ url_for('insert_ingredients') }}" method="post" autocomplete="off">
+				<label for="ingredient_name"></label><br>
+				<input type="text" name="ingredient_name" placeholder="Ingredient Name" id="ingredient_name" required><br>
+
+				<label for="available_quantity"></label><br>
+				<input type="number" name="available_quantity" placeholder="Available quantity" id="available_quantity" required><br>
+
+                <label for="unit"></label><br>
+				<input type="text" name="unit" placeholder="Unit" id="unit" required>
+
+	            <input type="submit" value="Submit">
+</form>
+</body>
+</html>
