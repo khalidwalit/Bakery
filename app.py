@@ -118,17 +118,17 @@ def edit():
             #account = cursor.fetchone()
             #if account:
                 #msg = 'Account already exists !'
-            if not re.match(r"01\d{7}$", custphone):
-                msg = 'Invalid phone number!'
-            elif not re.match(r'[A-Za-z0-9]+', custaddress):
-                msg = 'address must contain only characters and numbers !'
-            else:
-                query = "UPDATE customer SET custPhone = %s, custAddress = %s WHERE custID = %s"
-                values = (request.form['custPhone'], request.form['custAddress'], session['custID'])
-                cursor.execute(query, values)
-                db.connection.commit()
-                print(cursor.rowcount, "record(s) affected")
-                msg = 'You have successfully updated !'
+            #if not re.match(r"01\d{7}$", custphone):
+               # msg = 'Invalid phone number!'
+            #elif not re.match(r'[A-Za-z0-9]+', custaddress):
+             #   msg = 'address must contain only characters and numbers !'
+            #else:
+            query = "UPDATE customer SET custPhone = %s, custAddress = %s WHERE custID = %s"
+            values = (request.form['custPhone'], request.form['custAddress'], session['custID'])
+            cursor.execute(query, values)
+            db.connection.commit()
+            print(cursor.rowcount, "record(s) affected")
+            msg = 'You have successfully updated !'
             return redirect(url_for('profile'))
     return redirect(url_for('update'))
 
@@ -332,32 +332,32 @@ def insert_ingredients():
     return render_template("insertIngredients.html")
 
 
-@app.route('/update_ingredients', methods=['GET', 'POST'])
-def update_ingredients():
+@app.route('/update_ingredients/<int:ingredient_id>', methods=['GET', 'POST'])
+def update_ingredients(ingredient_id):
     if'loggedin' in session:
         if "available_quantity" in request.form:
 
             available_quantity = request.form['available_quantity']
             cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
-            print(session)
-            if not re.match(r"01\d{7}$", available_quantity):
-                msg = 'Invalid quantity!'
-            else:
-                query = "UPDATE ingredients SET available_quantity = %s, WHERE ingredient_id = %s"
-                values = (request.form['available_quantity'], session['ingredient_id'])
-                cursor.execute(query, values)
-                db.connection.commit()
-                print(cursor.rowcount, "record(s) affected")
-                msg = 'You have successfully updated !'
-            return redirect(url_for('view_ingredients'))
+            print(ingredient_id)
+
+            query = "UPDATE ingredients SET available_quantity = %s WHERE ingredient_id = %s"
+            values = (request.form['available_quantity'], ingredient_id,)
+            cursor.execute(query, values)
+            db.connection.commit()
+            print(cursor.rowcount, "record(s) affected")
+            msg = 'You have successfully updated !'
+        return redirect(url_for('view_ingredients'))
     return redirect(url_for('update_in'))
 
 
-@app.route('/update_in')
-def update_in():
+@app.route('/update_in/<int:ingredient_id>')
+def update_in(ingredient_id):
     cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
-    print(session)
-    cursor.execute("""SELECT * FROM ingredient WHERE ingredient_id = %s """, (session['ingredient_id'],))
+    print(ingredient_id)
+    sql = "SELECT * FROM ingredients WHERE ingredient_id = %s"
+    params = (ingredient_id, )
+    cursor.execute(sql, params)
     ingredient = cursor.fetchone()
     print('ingredient', ingredient)
     return render_template("updateIngredients.html", ingredient=ingredient)
@@ -366,6 +366,30 @@ def update_in():
 @app.route('/create_order')
 def create_order():
     return render_template('createOrder.html')
+
+
+@app.route('/create_pro')
+def create_pro():
+    return render_template('createProduct.html')
+
+
+@app.route('/create_product', methods=['GET', 'POST'])
+def create_product():
+    if request.method == "POST":
+        if "productName" in request.form and "productDesc" in request.form and "productDesc" in request.form and "productPrice" in request.form and \
+                "productSize" in request.form:
+
+            product_name = request.form['productName']
+            product_desc = request.form['productDesc']
+            product_price = request.form['productPrice']
+            product_size = request.form['productSize']
+
+            cur = db.connection.cursor(MySQLdb.cursors.DictCursor)
+            cur.execute("INSERT INTO login.product(productName,productDesc,productPrice, productSize)VALUES(%s,%s,%s,%s)", (product_name, product_desc, product_price, product_size))
+            db.connection.commit()
+            msg = 'Done created!'
+        # Show registration form with message (if any)
+    return render_template("createProduct.html")
 
 
 @app.route('/view_order')
@@ -381,11 +405,6 @@ def index_product():
 @app.route('/update_product')
 def update_product():
     return render_template('updateProduct.html')
-
-
-@app.route('/create_product')
-def create_product():
-    return render_template('createProduct.html')
 
 
 @app.route('/create_sales')
