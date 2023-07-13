@@ -34,8 +34,10 @@
             <tr>
                 <td>{{ ingredients.ingredient_name }}</td>
                 <td>{{ ingredients.available_quantity }} {{ ingredients.unit }}</td>
-                <td> <a href="{{url_for('update_in')}}" target="_blank">
-                   <button type="submit" class="btn btn-primary">Update</button></a>
+               <td>
+              <a href="{{ url_for('update_in',ingredient_id = ingredients.ingredient_id) }}" target="_blank">
+                <button type="submit" class="btn btn-primary">Update</button></a>
+            </td>
             </tr>
             {% endfor %}
         </tbody>

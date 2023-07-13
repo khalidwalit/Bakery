@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Ingredients</title>
+</head>
+<body>
+<form action="{{ url_for('update_ingredients', ingredient_id=ingredient.ingredient_id) }}" method="post" autocomplete="off">
+    <label for="available_quantity"></label>{{ingredient}}
+    <input type="number" name="available_quantity" placeholder="Available quantity" id="available_quantity" required>
+    <input type="submit" value="Submit"></a>
+</form>
+</body>
+</html>
