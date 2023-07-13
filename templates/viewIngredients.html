@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Ingredients</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>View Ingredient</h1>
+     <td> <a href="{{url_for('add')}}" target="_blank">
+                   <button type="submit" class="btn btn-primary">Add Ingredients</button></a><br>
+    <table>
+        <thead>
+            <tr>
+                <th>Ingredient Name</th>
+                <th>Available Quantity</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for ingredients in ingredients %}
+            <tr>
+                <td>{{ ingredients.ingredient_name }}</td>
+                <td>{{ ingredients.available_quantity }} {{ ingredients.unit }}</td>
+                <td> <a href="{{url_for('update_in')}}" target="_blank">
+                   <button type="submit" class="btn btn-primary">Update</button></a>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

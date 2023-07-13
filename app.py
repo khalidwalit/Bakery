@@ -105,6 +105,44 @@ def profile():
     return redirect(url_for('login'))
 
 
+@app.route('/edit', methods=['GET', 'POST'])
+def edit():
+    if'loggedin' in session:
+        if "custPhone" in request.form and "custAddress" in request.form:
+
+            custphone = request.form['custPhone']
+            custaddress = request.form['custAddress']
+            cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+            print(session)
+            #cursor.execute('SELECT * FROM customer WHERE custID = 24', (session['custID']))
+            #account = cursor.fetchone()
+            #if account:
+                #msg = 'Account already exists !'
+            if not re.match(r"01\d{7}$", custphone):
+                msg = 'Invalid phone number!'
+            elif not re.match(r'[A-Za-z0-9]+', custaddress):
+                msg = 'address must contain only characters and numbers !'
+            else:
+                query = "UPDATE customer SET custPhone = %s, custAddress = %s WHERE custID = %s"
+                values = (request.form['custPhone'], request.form['custAddress'], session['custID'])
+                cursor.execute(query, values)
+                db.connection.commit()
+                print(cursor.rowcount, "record(s) affected")
+                msg = 'You have successfully updated !'
+            return redirect(url_for('profile'))
+    return redirect(url_for('update'))
+
+
+@app.route('/update')
+def update():
+    cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+    print(session)
+    cursor.execute("""SELECT * FROM customer WHERE custID = %s """, (session['custID'],))
+    account = cursor.fetchone()
+    print('account', account)
+    return render_template("updateAccount.html", account=account)
+
+
 @app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
@@ -170,16 +208,6 @@ def login_admin():
     return render_template('dashboard.html', msg=msg)
 
 
-@app.route('/admin_page')
-def admin_page():
-    # Check if user is loggedin
-    if 'loggedin' in session:
-        # User is loggedin show them the home page
-        return render_template('adminpage.html', adminusername=session['adminUsername'])
-    # User is not loggedin redirect to login page
-    return redirect(url_for('admin'))
-
-
 @app.route('/profile_admin')
 def profile_admin():
     # Check if user is loggedin
@@ -191,7 +219,7 @@ def profile_admin():
         # Show the profile page with account info
         return render_template('profileAdmin.html', admin=admin)
     # User is not loggedin redirect to login page
-    return redirect(url_for('admin_page'))
+    return redirect(url_for('dashboard'))
 
 
 # http://localhost:5000/python/logout - this will be the logout page
@@ -255,6 +283,84 @@ def recommend():
         cursor.close()
 
     return "Error occurred. Please try again later."
+
+
+@app.route('/view_ingredients')
+def view_ingredients():
+    cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    try:
+        # Execute the SQL query
+        cursor.execute("""
+           SELECT * 
+           FROM ingredients;
+        """)
+
+        # Fetch all the rows
+        ingredients = cursor.fetchall()
+
+        return render_template('viewIngredients.html', ingredients=ingredients)
+
+    except MySQLdb.Error as e:
+        print(f"Error: {e}")
+
+    finally:
+        cursor.close()
+
+    return "Error occurred. Please try again later."
+
+
+@app.route('/add')
+def add():
+    return render_template("insertIngredients.html")
+
+
+@app.route('/insert_ingredients', methods=['GET', 'POST'])
+def insert_ingredients():
+    if request.method == "POST":
+        if "ingredient_name" in request.form and "available_quantity" in request.form and "unit" in request.form:
+            ingredient_name = request.form['ingredient_name']
+            available_quantity = request.form['available_quantity']
+            unit = request.form['unit']
+
+            cur = db.connection.cursor(MySQLdb.cursors.DictCursor)
+            cur.execute("INSERT INTO login.ingredients(ingredient_name,available_quantity,unit)"
+                        "VALUES(%s,%s,%s)", (ingredient_name, available_quantity, unit))
+            db.connection.commit()
+            msg = 'You have successfully insert!'
+
+    return render_template("insertIngredients.html")
+
+
+@app.route('/update_ingredients', methods=['GET', 'POST'])
+def update_ingredients():
+    if'loggedin' in session:
+        if "available_quantity" in request.form:
+
+            available_quantity = request.form['available_quantity']
+            cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+            print(session)
+            if not re.match(r"01\d{7}$", available_quantity):
+                msg = 'Invalid quantity!'
+            else:
+                query = "UPDATE ingredients SET available_quantity = %s, WHERE ingredient_id = %s"
+                values = (request.form['available_quantity'], session['ingredient_id'])
+                cursor.execute(query, values)
+                db.connection.commit()
+                print(cursor.rowcount, "record(s) affected")
+                msg = 'You have successfully updated !'
+            return redirect(url_for('view_ingredients'))
+    return redirect(url_for('update_in'))
+
+
+@app.route('/update_in')
+def update_in():
+    cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+    print(session)
+    cursor.execute("""SELECT * FROM ingredient WHERE ingredient_id = %s """, (session['ingredient_id'],))
+    ingredient = cursor.fetchone()
+    print('ingredient', ingredient)
+    return render_template("updateIngredients.html", ingredient=ingredient)
 
 
 @app.route('/create_order')
