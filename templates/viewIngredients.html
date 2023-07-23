@@ -18,8 +18,8 @@
 </head>
 <body>
     <h1>View Ingredient</h1>
-     <td> <a href="{{url_for('add')}}" target="_blank">
-                   <button type="submit" class="btn btn-primary">Add Ingredients</button></a><br>
+    <a href="{{url_for('add')}}" target="_blank">
+        <button type="submit" class="btn btn-primary"> Add Ingredients</button></a><br>
     <table>
         <thead>
             <tr>
@@ -29,7 +29,6 @@
             </tr>
         </thead>
         <tbody>
-
             {% for ingredients in ingredients %}
             <tr>
                 <td>{{ ingredients.ingredient_name }}</td>
