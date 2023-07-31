@@ -182,44 +182,53 @@ def register_admin():
 def login_admin():
     # Output message if something goes wrong...
     msg = ''
-    # Check if "username" and "password" POST requests exist (user submitted form)
+    # Check if "adminUsername" and "adminPassword" POST requests exist (user submitted form)
     if request.method == 'POST' and 'adminUsername' in request.form and 'adminPassword' in request.form:
         # Create variables for easy access
-        adminusername = request.form['adminUsername']
-        adminpassword = request.form['adminPassword']
+        adminUsername = request.form['adminUsername']
+        adminPassword = request.form['adminPassword']
         # Check if account exists using MySQL
         cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM login.admin WHERE adminUsername = %s AND adminPassword = %s',
-                       (adminusername, adminpassword,))
+        cursor.execute('SELECT * FROM admin WHERE adminUsername = %s AND adminPassword = %s', (adminUsername, adminPassword,))
         # Fetch one record and return result
         admin = cursor.fetchone()
         # If account exists in accounts table in out database
         if admin:
             # Create session data, we can access this data in other routes
-            session['logged_in'] = True
+            session['loggedin'] = True
             session['adminID'] = admin['adminID']
             session['adminUsername'] = admin['adminUsername']
             # Redirect to home page
-            return redirect(url_for('admin_page'))
+            return redirect(url_for('admin_home'))
         else:
             # Account doesnt exist or username/password incorrect
             msg = 'Incorrect adminUsername/adminPassword!'
     # Show the login form with message (if any)
-    return render_template('dashboard.html', msg=msg)
+    return render_template('loginadmin.html', msg=msg)
+
+
+@app.route('/admin_home')
+def admin_home():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        return render_template('homepageAdmin.html', adminUsername=session['adminUsername'])
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login_admin'))
 
 
 @app.route('/profile_admin')
 def profile_admin():
     # Check if user is loggedin
-    if 'logged_in' in session:
+    if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM admin WHERE adminID = %s', (session['adminID'],))
-        admin = cursor.fetchone()
+        profile = cursor.fetchone()
         # Show the profile page with account info
-        return render_template('profileAdmin.html', admin=admin)
+        return render_template('profileAdmin.html', profile=profile)
     # User is not loggedin redirect to login page
-    return redirect(url_for('dashboard'))
+    return redirect(url_for('login_admin'))
 
 
 # http://localhost:5000/python/logout - this will be the logout page
@@ -230,7 +239,7 @@ def logout_admin():
     session.pop('adminID', None)
     session.pop('adminUsername', None)
     # Redirect to login page
-    return redirect(url_for('admin_page'))
+    return redirect(url_for('login_admin'))
 
 
 @app.route('/dashboard')
@@ -266,7 +275,7 @@ def getAvailableIngredient():
         """)
 
     available_ingredients = cursor.fetchall()
-    return  available_ingredients
+    return available_ingredients
 
 
 def filterRecipe(available_ingredients, products):
@@ -329,7 +338,7 @@ def recommend():
             ingredient = requiredingredients(product)
             products[product_id]['ingredients_required'].append(ingredient)
         formatted_products = list(products.values())
-        recommend_product = filterRecipe(available_ingredients, formatted_products)
+        recommend_product = delete_duplicates(filterRecipe(available_ingredients, formatted_products))
         print('ready', recommend_product)
         return render_template('recommend.html', recommendations=recommend_product)
 
@@ -340,6 +349,21 @@ def recommend():
         cursor.close()
 
     return "Error occurred. Please try again later."
+
+
+def delete_duplicates(total_list):
+    expected_list = []
+    in_expected_list = False
+    for i in total_list:
+        # print(i)
+        for j in expected_list:
+            if j['productID'] == i['productID']:
+                in_expected_list = True
+        if not in_expected_list:
+            expected_list.append(i)
+        in_expected_list = False
+
+    return expected_list
 
 
 @app.route('/view_ingredients')
@@ -405,7 +429,7 @@ def update_ingredients(ingredient_id):
             print(cursor.rowcount, "record(s) affected")
             msg = 'You have successfully updated !'
         return redirect(url_for('view_ingredients'))
-    return redirect(url_for('update_in'))
+    return redirect(url_for('update_in', ingredient_id=ingredient_id))
 
 
 @app.route('/update_in/<int:ingredient_id>')
@@ -422,7 +446,17 @@ def update_in(ingredient_id):
 
 @app.route('/create_order')
 def create_order():
-    return render_template('createOrder.html')
+   return render_template('createOrder.html')
+
+
+@app.route('/view_productdetails')
+def view_productdetails():
+
+    cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM product WHERE productID = %s',)
+    product = cursor.fetchone()
+    # Show the product details page with product info
+    return render_template('viewProductDetails.html', product=product)
 
 
 @app.route('/create_pro')
@@ -433,20 +467,19 @@ def create_pro():
 @app.route('/create_product', methods=['GET', 'POST'])
 def create_product():
     if request.method == "POST":
-        if "productName" in request.form and "productDesc" in request.form and "productDesc" in request.form and "productPrice" in request.form and \
-                "productSize" in request.form:
-
-            product_name = request.form['productName']
-            product_desc = request.form['productDesc']
-            product_price = request.form['productPrice']
-            product_size = request.form['productSize']
+        # Handle the form submission and database insertion
+        if "productName" in request.form and "productDesc" in request.form and "productPrice" in request.form and "productSize" in request.form:
+            productName = request.form['productName']
+            productDesc = request.form['productDesc']
+            productPrice = request.form['productPrice']
+            productSize = request.form['productSize']
 
             cur = db.connection.cursor(MySQLdb.cursors.DictCursor)
-            cur.execute("INSERT INTO login.product(productName,productDesc,productPrice, productSize)VALUES(%s,%s,%s,%s)", (product_name, product_desc, product_price, product_size))
+            cur.execute("INSERT INTO login.product(productName, productDesc, productPrice, productSize) VALUES (%s, %s, %s, %s)", (productName, productDesc, productPrice, productSize))
             db.connection.commit()
-            msg = 'Done created!'
-        # Show registration form with message (if any)
-    return render_template("createProduct.html")
+            msg = 'You have successfully registered!'
+            # Show registration form with message (if any)
+        return render_template("createProduct.html")
 
 
 @app.route('/view_order')
@@ -467,6 +500,16 @@ def update_product():
 @app.route('/create_sales')
 def create_sales():
     return render_template('createRecordSales.html')
+
+
+@app.route('/recommendation')
+def recommendation():
+    return render_template('recommendation.html')
+
+
+@app.route('/delete')
+def delete():
+    return render_template('delete.html')
 
 
 if __name__ == '__main__':

@@ -10,13 +10,12 @@
 		<nav class="navtop">
 			<div>
 				<h1>BalqistheFoodie</h1>
-                <a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i>Dashboard</a>
-				<a href="{{ url_for('profile_admin') }}"><i class="fas fa-user-circle"></i>Profile</a>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
 				<a href="{{ url_for('logout_admin') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
 			</div>
 		</nav>
-		<div class="content">
+	<div class="content">
 			{% block content %}{% endblock %}
-		</div>
+	</div>
 	</body>
 </html>
