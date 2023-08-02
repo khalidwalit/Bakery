@@ -70,76 +70,28 @@
               <table class="table table-hover tm-table-small tm-product-table">
                 <thead>
                   <tr>
-                    <th scope="col">&nbsp;</th>
                     <th scope="col">PRODUCT NAME</th>
-                    <th scope="col">UNIT SOLD</th>
-                    <th scope="col">IN STOCK</th>
-                    <th scope="col">&nbsp;</th>
+                    <th scope="col">PRODUCT DESCRIPTION</th>
+                    <th scope="col">PRODUCT PRICE</th>
+                    <th scope="col">PRODUCT SIZE</th>
                   </tr>
                 </thead>
                 <tbody>
+                  {% for product in product %}
                   <tr>
-                    <th scope="row"><input type="checkbox" /></th>
-                    <td class="tm-product-name">Burn CheeseCake</td>
-                    <td>50</td>
-                    <td>50</td>
-                    <td>
-                      <a href="{{url_for('update_product')}}" class="tm-product-delete-link">
-                        <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                      </a>
-                    </td>
+                      <td>{{ product.productName }}</td>
+                      <td>{{ product.productDesc }}</td>
+                      <td>{{ product.productPrice }}</td>
+                      <td>{{ product.productSize }}</td>
+                      <td> <a href="{{url_for('update_pro', productID = product.productID)}}" class="btn btn-info btn-sm">Edit</a></td>
+                      <td>Delete</td>
                   </tr>
-                  <tr>
-                    <th scope="row"><input type="checkbox" /></th>
-                    <td class="tm-product-name">Vanilla Sponge Cake</td>
-                    <td>35</td>
-                    <td>25</td>
-                    <td>
-                      <a href="#" class="tm-product-delete-link">
-                        <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><input type="checkbox" /></th>
-                    <td class="tm-product-name">Pandan Gula Melaka Cake</td>
-                    <td>51</td>
-                    <td>14</td>
-                    <td>
-                      <a href="#" class="tm-product-delete-link">
-                        <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><input type="checkbox" /></th>
-                    <td class="tm-product-name">Chocolate Moist Cake</td>
-                    <td>14</td>
-                    <td>24</td>
-                    <td>
-                      <a href="#" class="tm-product-delete-link">
-                        <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                      </a>
-                    </td>
-                  </tr>
-                <tr>
-                    <th scope="row"><input type="checkbox" /></th>
-                    <td class="tm-product-name">Rainbow Cake</td>
-                    <td>14</td>
-                    <td>24</td>
-                    <td>
-                      <a href="#" class="tm-product-delete-link">
-                        <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                      </a>
-                    </td>
-                  </tr>
+                {% endfor %}
                 </tbody>
               </table>
             </div>
             <!-- table container -->
             <a href="{{url_for('create_pro')}}" class="btn btn-primary btn-block text-uppercase mb-3">Add new product</a>
-            <button class="btn btn-primary btn-block text-uppercase">Delete selected products
-            </button>
           </div>
         </div>
 
