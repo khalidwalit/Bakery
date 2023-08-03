@@ -590,33 +590,23 @@ def single_page(productID):
 @app.route('/addcart', methods=['POST'])
 def addcart():
     try:
+
         productID = request.form.get('productID')
-        productStock = request.form.get('productStock')
-        product = create_product.query.filter_by(productID=productID).first()
-
-        if productID and productStock and request.method == "POST":
-            DictItems = {productID: {'productName': product.productName, 'productDesc': product.productDesc, 'productPrice': product.productPrice, 'productSize': product.producSize, 'productStock': product.productStock}}
-
-            if 'Shoppingcart' in session:
-                print(session['Shoppingcart'])
-            else:
-                session['Shoppingcart'] = DictItems
-                return redirect(request.referrer)
-
+        cart = session.get('cart', [])
+        cart.append({'productID': productID})
+        session['cart'] = cart
+        print(session)
     except Exception as e:
         print(e)
     finally:
-        return redirect(request.referrer)
+        return redirect("/carts")
 
 
 @app.route('/carts')
 def getCart():
-    if 'Shoppingcart' not in session:
-        return redirect('single_page')
-    subtotal = 0
-    for key, product in session['Shoppingcart'].items():
-        subtotal += (product['productPrice']) * int(product['productStock'])
-    return render_template('carts.html')
+    cart = session['cart']
+    print(session)
+    return render_template('carts.html', cart=cart)
 
 
 @app.route('/create_order')
@@ -671,6 +661,7 @@ def recommendation():
 
 @app.route('/delete')
 def delete():
+
     return render_template('delete.html')
 
 
