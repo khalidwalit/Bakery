@@ -26,20 +26,23 @@
             background-color: ;
         }
         body{
-       background-color: #FFC0CB;
-        }
+         background-color: #FFC0CB;
+         }
         .btn{
-        background-color: #f0923a;
+        background-color: #FFC0CB;
       }
+
     </style>
 </head>
 <body>
-<body id="reportsPage">
+<div id="reportsPage">
     <div class="" id="home">
         <nav class="navbar navbar-expand-xl">
             <div class="container h-100">
                 <a class="navbar-brand" href="index.html">
-                    <h1 class="tm-site-title mb-0">Product Admin</h1>
+                    <div>
+                    <a href="./index.html"><img src="{{url_for('static', filename ='BTFlogo.png')}}" style="width:40px;" class="rounded-pill" alt=""></a></div>
+                    <h1 class="tm-site-title mb-0">Admin Page</h1>
                 </a>
                 <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +74,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{url_for('profile_admin')}}">
-                               Profile
+                               <i class="fas fa-user"></i>Profile
                             </a>
                         </li>
                     </ul>
@@ -86,10 +89,11 @@
             </div>
         </nav>
     </div>
-</body>
-    <h1>View Ingredient</h1>
-    <a href="{{url_for('add')}}" target="_blank">
-        <button type="submit" class="btn btn-primary"> Add Ingredients</button></a><br><br>
+</div>
+    <h4>View Ingredient</h4>
+    <hr>
+       <a href="{{url_for('add')}}" target="_blank">
+                <button type="submit" class="btn btn-primary"> Add Ingredients</button></a>
     <table>
         <thead>
             <tr>
@@ -104,7 +108,7 @@
                 <td>{{ ingredients.ingredient_name }}</td>
                 <td>{{ ingredients.available_quantity }} {{ ingredients.unit }}</td>
                <td>
-              <a href="{{ url_for('update_in',ingredient_id = ingredients.ingredient_id) }}" target="_blank">
+                <a href="{{ url_for('update_in',ingredient_id = ingredients.ingredient_id) }}" target="_blank">
                 <button type="submit" class="btn btn-primary">Update</button></a>
                        <button type="submit" class="btn btn-primary">Delete</button>
             </td>

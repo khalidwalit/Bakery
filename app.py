@@ -1,13 +1,25 @@
+import secrets
+
 from MySQLdb._mysql import connection
 import re
-from flask import Flask, render_template, request, redirect, session, url_for, flash
+from flask import Flask, render_template, request, redirect, session, url_for, flash, current_app
 import MySQLdb
+from flask_login import login_required, current_user
 from flask_mysqldb import MySQL
 
 import mysql.connector
 from mysql.connector import cursor
 import MySQLdb.cursors
 from werkzeug.exceptions import abort
+
+
+def MagerDicts(dict1, dict2):
+    if isinstance(dict1, list) and isinstance(dict2, list):
+        return dict1 + dict2
+    elif isinstance(dict1, dict) and isinstance(dict2, dict):
+        return dict(list(dict1.items()) + list(dict2.items()))
+    return False
+
 
 app = Flask(__name__)
 app.secret_key = "1234353234"
@@ -532,6 +544,119 @@ def update_pro(productID):
     product = cursor.fetchone()
     print('product', product)
     return render_template("updateProduct.html", product=product)
+
+
+@app.route('/delete_product/<int:productID>', methods=['GET', 'POST'])
+def delete_product(productID):
+    if 'loggedin' in session:
+        cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+
+        # SQL query to delete the selected product by productID
+        delete_query = "DELETE FROM product WHERE productID = %s"
+        cursor.execute(delete_query, (productID,))
+
+        # Commit the changes and close the connection
+        db.connection.commit()
+        cursor.close()
+
+        msg = 'Product successfully deleted!'
+        return redirect(url_for('index_product'))
+
+        # If not logged in, redirect to the login page or display an error message
+    return redirect(url_for('login'))
+
+
+@app.route('/single_page/<int:productID>')
+def single_page(productID):
+    # Connect to MySQL
+    cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    # Execute SQL query to get the product details
+    query = "SELECT * FROM product WHERE productID = %s"
+    cursor.execute(query, (productID,))
+    product = cursor.fetchone()
+
+    # Close the connection
+    db.connection.commit()
+    cursor.close()
+
+    if not product:
+        # Return 404 if product not found
+        return render_template('404.html'), 404
+
+    return render_template('singlepages.html', product=product)
+
+
+@app.route('/addcart', methods=['POST'])
+def addcart():
+    try:
+        productID = request.form.get('productID')
+        productStock = request.form.get('productStock')
+        product = create_product.query.filter_by(productID=productID).first()
+
+        if productID and productStock and request.method == "POST":
+            DictItems = {productID: {'productName': product.productName, 'productDesc': product.productDesc, 'productPrice': product.productPrice, 'productSize': product.producSize, 'productStock': product.productStock}}
+
+            if 'Shoppingcart' in session:
+                print(session['Shoppingcart'])
+            else:
+                session['Shoppingcart'] = DictItems
+                return redirect(request.referrer)
+
+    except Exception as e:
+        print(e)
+    finally:
+        return redirect(request.referrer)
+
+
+@app.route('/carts')
+def getCart():
+    if 'Shoppingcart' not in session:
+        return redirect('single_page')
+    subtotal = 0
+    for key, product in session['Shoppingcart'].items():
+        subtotal += (product['productPrice']) * int(product['productStock'])
+    return render_template('carts.html')
+
+
+@app.route('/create_order')
+@login_required  # Requires the user to be logged in to access this route
+def create_order():
+    try:
+        custID = current_user.id
+        if 'Shoppingcart' in session:
+            orderID = secrets.token_hex(5)
+            # Save each cart item as a separate order record
+            for productID, cart_item in session['Shoppingcart'].items():
+                order = orders(custID=custID, orderID=orderID, orders=session)
+                db.connection.add(order)
+
+                db.connection.commit()
+                session.pop('Shoppingcart')
+                flash('Your order has been sent successfully', 'success')
+                return redirect(url_for('homepage'))
+            else:
+                flash('Your cart is empty', 'info')
+                return redirect(url_for('getCart'))
+
+    except Exception as e:
+            print(e)
+            flash('Something went wrong', 'danger')
+            return redirect(url_for('getCart'))
+
+
+@app.route('/orders/<int:orderID>')
+def orders(orderID):
+    if current_user.is_authenticated:
+        totalOrder = 0
+        custID = current_user.custID
+        customer = register.query.filter_by(custID=custID).first()
+        orders = orders.query.filter_by(custID=custID).first()
+        for _key, product in orders.order.items():
+           totalOrder = (product['productPrice']) * (product['productStock'])
+    else:
+        return redirect(url_for('login'))
+    return render_template('login.html', orderID=orderID, totalOrder=totalOrder)
 
 
 @app.route('/create_sales')

@@ -7,7 +7,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>View Order</title>
+    <title>Product</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -92,47 +92,85 @@
                         <ul>
                             <li><a href="{{url_for('index')}}">Home</a></li>
                             <li><a href="{{url_for('about')}}">About</a></li>
-                              <li><a href="#">Product</a>
+                             <li><a href="#">Product</a>
                                 <ul class="dropdown">
                                     <li><a href="{{url_for('cake')}}">Cakes</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{url_for('faq')}}">FAQ</a></li>
-                            <li><a href="{{url_for('contact')}}">Contact</a></li>
+                            <li><a href="#">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
             </div>
         </div>
     </header>
-    <!-- Header Section End -->
-<div class="container">
-    <h1>Order Details</h1>
-  <h1>Recommendation</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Product Size</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for recommendation in recommendations %}
-            <tr>
-                <td>{{ createorder.productID }}</td>
-                <td>{{ createorder.productName }}</td>
-                <td>{{ createorder.productSize }}</td>
+    <br>
+<h2>Cake Suggestion</h2>
+<div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="/static/burncheese.jpg">
+                            <div class="product__label">
+                                <span>CAKE</span>
+                            </div>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">Burn Cheese Cake 8-inch</a></h6>
+                            <div class="product__item__price">RM80.00</div>
+                            <div class="cart_add">
+                                <a href="{{url_for('create_order')}}">Order Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+	<div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="/static/cake22.jpg">
+                            <div class="product__label">
+                                <span>CAKE</span>
+                            </div>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">Vanilla Sponge Cake 8-inch</a></h6>
+                            <div class="product__item__price">RM80.00</div>
+                            <div class="cart_add">
+                                <a href="{{url_for('create_order')}}">Order Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-   <a href="{{url_for('dashboard')}}" target="_blank">
-     <button type="submit" class="btn btn-primary">Back</button></a>
-     <button type="submit" class="btn btn-primary">Delete</button>
-</div>
+	                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="/static/rainbowCake.jpg">
+                            <div class="product__label">
+                                <span>CAKE</span>
+                            </div>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><a href="#">Rainbow Cake 8-inch</a></h6>
+                            <div class="product__item__price">RM80.00</div>
+                            <div class="cart_add">
+                                <a href="{{url_for('create_order')}}">Order Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+</div> <!-- row end.// -->
+<!-- Js Plugins -->
+<script src="/static/cake-main/js/jquery-3.3.1.min.js"></script>
+<script src="/static/cake-main/js/bootstrap.min.js"></script>
+<script src="/static/cake-main/js/jquery.nice-select.min.js"></script>
+<script src="/static/cake-main/js/jquery.barfiller.js"></script>
+<script src="/static/cake-main/js/jquery.magnific-popup.min.js"></script>
+<script src="/static/cake-main/js/jquery.slicknav.js"></script>
+<script src="/static/cake-main/js/owl.carousel.min.js"></script>
+<script src="/static/cake-main/js/jquery.nicescroll.min.js"></script>
+<script src="/static/cake-main/js/main.js"></script>
+    </main>
+    </div>
 </div>
 </body>
 </html>

@@ -44,19 +44,14 @@
                 <a href="#" class="search-switch"><img src="/static/cake-main/img/icon/search.png" alt=""></a>
                 <a href="#"><img src="/static/cake-main/icon/heart.png" alt=""></a>
             </div>
-            <div class="offcanvas__cart__item">
-                <a href="#"><img src="/static/cake-main/img/icon/cart.png" alt=""> <span>0</span></a>
-                <div class="cart__price">Cart: <span>RM 0.00</span></div>
-            </div>
         </div>
         <div class="offcanvas__logo">
             <a href="./index.html"><img src="/static/cake-main/img/logo.png" alt=""></a>
         </div>
-                <li><a href="{{url_for('customer')}}">Customer</a></li>
-                <li><a href="{{url_for('admin')}}">Admin</a> </li>
-            </ul>
+                <a href="{{url_for('customer')}}">Customer</a>
+                <a href="{{url_for('admin')}}">Admin</a>
         </div>
-    </div>
+
     <!-- Offcanvas Menu End -->
 
     <!-- Header Section Begin -->
@@ -68,8 +63,8 @@
                         <div class="header__top__inner">
                             <div class="header__top__left">
                                 <ul>
-                                    <li><a href="{{url_for('customer')}}">Customer </a> </li>
-                                     <li><a href="{{url_for('admin')}}">Admin</a> </li>
+                                    <li><a href="{{url_for('customer')}}">Customer</a></li>
+                                     <li><a href="{{url_for('admin')}}">Admin</a></li>
                                 </ul>
                             </div>
                             <div class="header__logo">
@@ -99,7 +94,7 @@
                         <ul>
                             <li class="active"><a href="{{url_for('index')}}">Home</a></li>
                             <li><a href="{{url_for('about')}}">About</a></li>
-                             <li><a href="#">Product</a>
+                            <li><a href="#">Product</a>
                                 <ul class="dropdown">
                                     <li><a href="{{url_for('cake')}}">Cakes</a></li>
                                 </ul>
@@ -113,6 +108,7 @@
         </div>
     </header>
     <!-- Header Section End -->
+    <div class = "container">
 <div class="register">
 			<h1>Register</h1>
 			<div class="links">
@@ -155,5 +151,6 @@
 				<input type="submit" value="Register">
 			</form>
 		</div>
+    </div>
 </body>
 </html>
