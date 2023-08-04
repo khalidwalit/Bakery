@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Product Page - Admin HTML Template</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
     <!-- https://fonts.google.com/specimen/Roboto -->
     <link rel="stylesheet" href="/static/css/fontawesome.min.css"/>
     <!-- https://fontawesome.com/ -->
@@ -14,14 +13,6 @@
     <!-- https://getbootstrap.com/ -->
     <link rel="stylesheet" href="/static/css/templatemo-style.css">
     <!--Product Admin CSS Template https://templatemo.com/tm-524-product-admin-->
-     <style>
-      body{
-       background-color: #FFC0CB;
-      }
-      .btn{
-      background-color: #FFC0CB;
-      }
-    </style>
   </head>
 
  <body id="reportsPage">
@@ -57,7 +48,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" href="{{url_for('index_product')}}">
-                                <i class="fas fa-shopping-cart"></i>Products
+                                <i class="fas fa-tag"></i>Products
                             </a>
                         </li>
                         <li class="nav-item">
@@ -90,6 +81,8 @@
                     <th scope="col">PRODUCT DESCRIPTION</th>
                     <th scope="col">PRODUCT PRICE</th>
                     <th scope="col">PRODUCT SIZE</th>
+                      <th scope="col">IMAGE</th>
+                      <th scope="col">ACTION</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -99,8 +92,9 @@
                       <td>{{ product.productDesc }}</td>
                       <td>{{ product.productPrice }}</td>
                       <td>{{ product.productSize }}</td>
-                      <td> <a href="{{url_for('update_pro', productID = product.productID)}}" class="btn btn-info btn-sm">Edit</a></td>
-                      <td><a href="{{url_for('delete_product', productID = product.productID)}}" class="btn btn-info btn-sm">Delete</a>
+                      <td>{{ product.image }}</td>
+                      <td> <a href="{{url_for('update_pro', productID = product.productID)}}" class= "btn btn-primary">Edit</a>
+                          <a href="{{url_for('delete_product', productID = product.productID)}}" class= "btn btn-primary">Delete</a>
                       </td>
                   </tr>
                 {% endfor %}
@@ -124,6 +118,7 @@
       });
     </script>
       </div>
+    </div>
     </div>
   </body>
 </html>

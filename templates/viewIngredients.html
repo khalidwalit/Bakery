@@ -22,16 +22,6 @@
             border: 1px solid black;
             padding: 8px;
         }
-        th {
-            background-color: ;
-        }
-        body{
-         background-color: #FFC0CB;
-         }
-        .btn{
-        background-color: #FFC0CB;
-      }
-
     </style>
 </head>
 <body>
@@ -53,7 +43,7 @@
                     <ul class="navbar-nav mx-auto h-100">
                         <li class="nav-item">
                             <a class="nav-link" href="{{url_for('dashboard')}}">
-                                <i class="fas fa-tachometer-alt"></i>Dashboard
+                               <i class="fas fa-columns"></i>  Dashboard
                             </a>
                         </li>
                           <li class="nav-item">
@@ -94,11 +84,13 @@
     <hr>
        <a href="{{url_for('add')}}" target="_blank">
                 <button type="submit" class="btn btn-primary"> Add Ingredients</button></a>
+<br>
     <table>
         <thead>
             <tr>
                 <th>Ingredient Name</th>
                 <th>Available Quantity</th>
+                <th>Action</th>
 
             </tr>
         </thead>

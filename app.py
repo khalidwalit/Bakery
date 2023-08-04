@@ -1,8 +1,9 @@
+import os
 import secrets
 
 from MySQLdb._mysql import connection
 import re
-from flask import Flask, render_template, request, redirect, session, url_for, flash, current_app
+from flask import Flask, render_template, request, redirect, session, url_for, flash, current_app, send_from_directory
 import MySQLdb
 from flask_login import login_required, current_user
 from flask_mysqldb import MySQL
@@ -10,7 +11,9 @@ from flask_mysqldb import MySQL
 import mysql.connector
 from mysql.connector import cursor
 import MySQLdb.cursors
+from mysqlx.protobuf.mysqlx_crud_pb2 import Order
 from werkzeug.exceptions import abort
+from werkzeug.utils import secure_filename
 
 
 def MagerDicts(dict1, dict2):
@@ -30,6 +33,10 @@ app.config["MYSQL_PASSWORD"] = "fatin222"
 app.config["MYSQL_DB"] = "login"
 
 db = MySQL(app)
+
+UPLOAD_FOLDER = 'C:\\Users\\HP\\PycharmProjects\\Project-FYP\\static\\uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.static_folder = 'static'
 
 
 @app.route('/')
@@ -77,7 +84,7 @@ def login():
         cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM customer WHERE username = %s AND custPassword = %s', (username, custpassword,))
         # Fetch one record and return result
-        customer= cursor.fetchone()
+        customer = cursor.fetchone()
         # If account exists in accounts table in out database
         if customer:
             # Create session data, we can access this data in other routes
@@ -119,22 +126,21 @@ def profile():
 
 @app.route('/edit', methods=['GET', 'POST'])
 def edit():
-    if'loggedin' in session:
+    if 'loggedin' in session:
         if "custPhone" in request.form and "custAddress" in request.form:
-
             custphone = request.form['custPhone']
             custaddress = request.form['custAddress']
             cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
             print(session)
-            #cursor.execute('SELECT * FROM customer WHERE custID = 24', (session['custID']))
-            #account = cursor.fetchone()
-            #if account:
-                #msg = 'Account already exists !'
-            #if not re.match(r"01\d{7}$", custphone):
-               # msg = 'Invalid phone number!'
-            #elif not re.match(r'[A-Za-z0-9]+', custaddress):
-             #   msg = 'address must contain only characters and numbers !'
-            #else:
+            # cursor.execute('SELECT * FROM customer WHERE custID = 24', (session['custID']))
+            # account = cursor.fetchone()
+            # if account:
+            # msg = 'Account already exists !'
+            # if not re.match(r"01\d{7}$", custphone):
+            # msg = 'Invalid phone number!'
+            # elif not re.match(r'[A-Za-z0-9]+', custaddress):
+            #   msg = 'address must contain only characters and numbers !'
+            # else:
             query = "UPDATE customer SET custPhone = %s, custAddress = %s WHERE custID = %s"
             values = (request.form['custPhone'], request.form['custAddress'], session['custID'])
             cursor.execute(query, values)
@@ -161,6 +167,7 @@ def logout():
     session.pop('loggedin', None)
     session.pop('custID', None)
     session.pop('username', None)
+    session.pop('cart', None)
     # Redirect to login page
     return redirect(url_for('login'))
 
@@ -201,7 +208,8 @@ def login_admin():
         adminPassword = request.form['adminPassword']
         # Check if account exists using MySQL
         cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM admin WHERE adminUsername = %s AND adminPassword = %s', (adminUsername, adminPassword,))
+        cursor.execute('SELECT * FROM admin WHERE adminUsername = %s AND adminPassword = %s',
+                       (adminUsername, adminPassword,))
         # Fetch one record and return result
         admin = cursor.fetchone()
         # If account exists in accounts table in out database
@@ -250,6 +258,7 @@ def logout_admin():
     session.pop('loggedin', None)
     session.pop('adminID', None)
     session.pop('adminUsername', None)
+    session.pop('cart')
     # Redirect to login page
     return redirect(url_for('login_admin'))
 
@@ -336,7 +345,7 @@ def recommend():
         # Fetch all the rows
         fetch_products = cursor.fetchall()
         available_ingredients = getAvailableIngredient()
-        #required_ingredients =requiredingredients(product)
+        # required_ingredients =requiredingredients(product)
         products = {}
         for product in fetch_products:
             product_id = product['productID']
@@ -427,9 +436,8 @@ def insert_ingredients():
 
 @app.route('/update_ingredients/<int:ingredient_id>', methods=['GET', 'POST'])
 def update_ingredients(ingredient_id):
-    if'loggedin' in session:
+    if 'loggedin' in session:
         if "available_quantity" in request.form:
-
             available_quantity = request.form['available_quantity']
             cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
             print(ingredient_id)
@@ -449,7 +457,7 @@ def update_in(ingredient_id):
     cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
     print(ingredient_id)
     sql = "SELECT * FROM ingredients WHERE ingredient_id = %s"
-    params = (ingredient_id, )
+    params = (ingredient_id,)
     cursor.execute(sql, params)
     ingredient = cursor.fetchone()
     print('ingredient', ingredient)
@@ -461,27 +469,67 @@ def create_pro():
     return render_template('createProduct.html')
 
 
-@app.route('/create_product', methods=['GET', 'POST'])
+@app.route('/create_product', methods=['POST'])
 def create_product():
     if request.method == "POST":
         if "productName" in request.form and "productDesc" in request.form and "productPrice" in request.form and \
-                "productSize" in request.form:
+                "productSize" in request.form and 'image' in request.files:
             productName = request.form['productName']
             productDesc = request.form['productDesc']
             productPrice = request.form['productPrice']
             productSize = request.form['productSize']
+            image = request.files['image']
 
-            cur = db.connection.cursor(MySQLdb.cursors.DictCursor)
-            cur.execute("INSERT INTO login.product(productName,productDesc,productPrice, productSize)""VALUES(%s,%s,%s,%s)", (productName, productDesc, productPrice, productSize,))
+            # Save the image to the 'uploads' folder on disk
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            # Store the file path or URL in the 'image_path' column of the database
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute(
+                "INSERT INTO product (productName, productDesc, productPrice, productSize, image) ""VALUES (%s, %s, %s, %s, %s)",
+                (productName, productDesc, productPrice, productSize, image))
             db.connection.commit()
+
             msg = 'Successfully create product!'
-        # Show registration form with message (if any)
+        else:
+            msg = 'Failed to create product! Please provide all the required information.'
+
     return render_template("createProduct.html")
+
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_image():
+    if request.method == 'POST':
+        # Get the uploaded file from the form
+        image = request.files['image']
+        return 'Image uploaded successfully!'
+    return render_template('indexProduct.html')
 
 
 @app.route('/view_order')
 def view_order():
-    return render_template('viewOrder.html')
+    cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+    try:
+        # Execute the SQL query
+        cursor.execute("""
+             SELECT * 
+             FROM orders;
+          """)
+
+        # Fetch all the rows
+        orders = cursor.fetchall()
+
+        return render_template('viewOrder.html', orders=orders)
+
+    except MySQLdb.Error as e:
+        print(f"Error: {e}")
+
+    finally:
+        cursor.close()
+
+    return "Error occurred. Please try again later."
 
 
 @app.route('/index_product')
@@ -512,26 +560,30 @@ def index_product():
 @app.route('/update_product/<int:productID>', methods=['GET', 'POST'])
 def update_product(productID):
     if 'loggedin' in session:
-        if "productName" in request.form and "productDesc" in request.form and "productPrice" in request.form and "productSize" in request.form:
-            productName = request.form['productName']
-            productDesc = request.form['productDesc']
-            productPrice = request.form['productPrice']
-            productSize = request.form['productSize']
+        if request.method == 'POST':
+            if all(field in request.form for field in ["productName", "productDesc", "productPrice", "productSize"]) and 'image' in request.files:
+                productName = request.form['productName']
+                productDesc = request.form['productDesc']
+                productPrice = request.form['productPrice']
+                productSize = request.form['productSize']
+                image = request.files['image']
 
-            cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
-            print(productID)
+                # Save the image to the 'uploads' folder on disk
+                filename = secure_filename(image.filename)
+                image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            query = "UPDATE product SET productName = %s, productDesc = %s, productPrice = %s, productSize = %s WHERE productID = %s"
-            values = (productName, productDesc, productPrice, productSize, productID)
+                # Store the file path or URL in the 'image_path' column of the database
+                image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
-            cursor.execute(query, values)
-            db.connection.commit()
-            print(cursor.rowcount, "record(s) affected")
+                cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+                query = "UPDATE product SET productName = %s, productDesc = %s, productPrice = %s, productSize = %s, image = %s WHERE productID = %s"
+                values = (productName, productDesc, productPrice, productSize, image, productID)
 
-            msg = 'You have successfully updated!'
-            return redirect(url_for('index_product'))
+                cursor.execute(query, values)
+                db.connection.commit()
 
-    return redirect(url_for('update_pro', productID=productID))
+                msg = 'You have successfully updated!'
+    return redirect(url_for('index_product'))
 
 
 @app.route('/update_pro/<int:productID>', methods=['GET', 'POST'])
@@ -577,13 +629,11 @@ def single_page(productID):
     product = cursor.fetchone()
 
     # Close the connection
-    db.connection.commit()
     cursor.close()
 
     if not product:
         # Return 404 if product not found
         return render_template('404.html'), 404
-
     return render_template('singlepages.html', product=product)
 
 
@@ -592,8 +642,12 @@ def addcart():
     try:
 
         productID = request.form.get('productID')
+        productName = request.form.get('productName')
+        productPrice = request.form.get('productPrice')
+        productSize = request.form.get('productSize')
+        quantity = request.form.get('quantity')
         cart = session.get('cart', [])
-        cart.append({'productID': productID})
+        cart.append({'productID': productID, 'productName': productName, 'productPrice': productPrice, 'productSize': productSize, 'quantity': quantity})
         session['cart'] = cart
         print(session)
     except Exception as e:
@@ -610,48 +664,55 @@ def getCart():
 
 
 @app.route('/create_order')
-@login_required  # Requires the user to be logged in to access this route
 def create_order():
     try:
-        custID = current_user.id
-        if 'Shoppingcart' in session:
+        custID = current_user.id  # Assuming you have imported 'current_user' from the appropriate module
+        if 'cart' in session:
             orderID = secrets.token_hex(5)
+
             # Save each cart item as a separate order record
-            for productID, cart_item in session['Shoppingcart'].items():
+            for productID, cart_item in session['carts'].items():
                 order = orders(custID=custID, orderID=orderID, orders=session)
-                db.connection.add(order)
+                db.session.add(order)
 
-                db.connection.commit()
-                session.pop('Shoppingcart')
-                flash('Your order has been sent successfully', 'success')
-                return redirect(url_for('homepage'))
-            else:
-                flash('Your cart is empty', 'info')
-                return redirect(url_for('getCart'))
+            db.session.commit()  # Commit all orders at once after the loop completes
 
-    except Exception as e:
-            print(e)
-            flash('Something went wrong', 'danger')
+            session.pop('carts')
+            flash('Your order has been sent successfully', 'success')
+            return redirect(url_for('homepage'))
+        else:
+            flash('Your cart is empty', 'info')
             return redirect(url_for('getCart'))
 
-
-@app.route('/orders/<int:orderID>')
-def orders(orderID):
-    if current_user.is_authenticated:
-        totalOrder = 0
-        custID = current_user.custID
-        customer = register.query.filter_by(custID=custID).first()
-        orders = orders.query.filter_by(custID=custID).first()
-        for _key, product in orders.order.items():
-           totalOrder = (product['productPrice']) * (product['productStock'])
-    else:
-        return redirect(url_for('login'))
-    return render_template('login.html', orderID=orderID, totalOrder=totalOrder)
+    except Exception as e:
+        print(e)
+        flash('Something went wrong', 'danger')
+        return redirect(url_for('getCart'))
 
 
 @app.route('/create_sales')
 def create_sales():
-    return render_template('createRecordSales.html')
+    cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    try:
+        # Execute the SQL query
+        cursor.execute("""
+              SELECT * 
+              FROM orders;
+           """)
+
+        # Fetch all the rows
+        sale = cursor.fetchall()
+
+        return render_template('viewRecordSales.html', sale=sale)
+
+    except MySQLdb.Error as e:
+        print(f"Error: {e}")
+
+    finally:
+        cursor.close()
+
+    return "Error occurred. Please try again later."
 
 
 @app.route('/recommendation')
@@ -661,8 +722,12 @@ def recommendation():
 
 @app.route('/delete')
 def delete():
-
     return render_template('delete.html')
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 if __name__ == '__main__':

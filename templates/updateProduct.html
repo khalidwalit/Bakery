@@ -40,7 +40,7 @@
                     <ul class="navbar-nav mx-auto h-100">
                         <li class="nav-item">
                             <a class="nav-link" href="{{url_for('dashboard')}}">
-                                <i class="fas fa-tachometer-alt"></i>Dashboard
+                               <i class="fas fa-columns"></i>  Dashboard
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
@@ -56,13 +56,13 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" href="{{url_for('index_product')}}">
-                                <i class="fas fa-shopping-cart"></i>Products
+                               <i class="fas fa-tag"></i>Products
                                  <span class="sr-only">(current)</span>
                             </a>
                         </li>
                          <li class="nav-item">
                             <a class="nav-link" href="{{url_for('profile_admin')}}">
-                               Profile
+                                <i class="fas fa-user"></i>Profile
                             </a>
                         </li>
                         </ul>
@@ -75,44 +75,48 @@
                      </div>
                      </div>
      </nav>
-    <div class="container tm-mt-big tm-mb-big">
-      <div class="row">
+   <div class="container tm-mt-big tm-mb-big">
+    <div class="row">
         <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
-          <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
-            <div class="row">
-              <div class="col-12">
-                <h2 class="tm-block-title d-inline-block">Update Product</h2>
-              </div>
+            <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="tm-block-title d-inline-block">Update Product</h2>
+                    </div>
+                </div>
+                <div class="row tm-edit-product-row">
+                    <div class="col-xl-6 col-lg-6 col-md-12">
+                        <form action="{{url_for('update_product', productID=product.productID)}}" method="post" autocomplete="off" class="tm-edit-product-form " enctype="multipart/form-data">
+                            <div class="form-group mb-3">
+                                <label>Product Name</label>
+                                <input id="productName" name="productName" type="text" value="{{ product.productName }}" class="form-control validate" required />
+                            </div>
+                            <div class="form-group mb-3">
+                                <label>Product Description</label>
+                                <textarea class="form-control validate" name="productDesc" rows="3" required>{{ product.productDesc }}</textarea>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label>Product Price</label>
+                                <input id="productPrice" name="productPrice" type="text" value="{{ product.productPrice }}" class="form-control validate" required/>
+                            </div>
+                            <div class="row">
+                                <div class="form-group mb-3 col-xs-12 col-sm-6">
+                                    <label>Product Size</label>
+                                    <input id="productSize" name="productSize" type="text" value="{{ product.productSize }}" class="form-control validate" required/>
+                                </div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label>Product Image</label>
+                                <input type="file" name="image" class="form-control-file" required />
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update product</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="row tm-edit-product-row">
-              <div class="col-xl-6 col-lg-6 col-md-12">
-               <form action="{{url_for('update_product', productID = product.productID)}}" method="post" autocomplete="off" class="tm-edit-product-form">
-                   <div class="form-group mb-3">
-                    <label>Product Name</label>
-                    <input id="productName"  name="productName" type="text" value="{{ product.productName }}" class="form-control validate" required />
-                  </div>
-                  <div class="form-group mb-3">
-                    <label>Product Description</label>
-                    <textarea class="form-control validate" name="productDesc" rows="3" required> "{{ product.productDesc }}"</textarea>
-                  </div>
-                    <div class="form-group mb-3">
-                    <label>Product Price</label>
-                        <input id="productPrice" name="productPrice" type="text" value="{{ product.productPrice }}" class="form-control validate" required/>
-                  </div>
-                  <div class="row">
-                        <div class="form-group mb-3 col-xs-12 col-sm-6">
-                          <label>Product Size</label>
-                          <input id="productSize" name="productSize" type="text" value="{{ product.productSize }}" class="form-control validate" required/>
-                        </div>
-                  </div>
-                 <button type="submit" class="btn btn-primary btn-block text-uppercase">Update product</button>
-               </form>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
+</div>
     <footer class="tm-footer row tm-mt-small">
         <div class="col-12 font-weight-light">
           <p class="text-center text-white mb-0 px-4 small">

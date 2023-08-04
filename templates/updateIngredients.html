@@ -51,7 +51,7 @@
                     <ul class="navbar-nav mx-auto h-100">
                         <li class="nav-item">
                             <a class="nav-link" href="{{url_for('dashboard')}}">
-                                <i class="fas fa-tachometer-alt"></i>Dashboard
+                                <i class="fas fa-columns"></i>  Dashboard
                             </a>
                         </li>
                           <li class="nav-item">
@@ -67,7 +67,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{url_for('index_product')}}">
-                                <i class="fas fa-shopping-cart"></i>Products
+                               <i class="fas fa-tag"></i>Products
                             </a>
                         </li>
                         <li class="nav-item">
@@ -88,10 +88,16 @@
         </nav>
     </div>
 </body>
+<h3>Update Quantity</h3>
+<div class = "container">
 <form action="{{ url_for('update_ingredients', ingredient_id=ingredient.ingredient_id) }}" method="post" autocomplete="off">
-    <label for="available_quantity"></label>{{ingredient}}
-    <input type="number" name="available_quantity" placeholder="Available quantity" id="available_quantity" required>
-    <input type="submit" value="Submit">
+    <label> Ingredient Name</label>
+     <input id="ingredient_name" name="ingredient_name" type="text" value="{{ ingredient.ingredient_name }}" class="form-control validate"/>
+    <label> Available Quantity</label>
+     <input id="available_quantity" name="available_quantity" type="number" value="{{ ingredient.available_quantity }}" class="form-control validate" required/><br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Cancel</button>
 </form>
+</div>
 </body>
 </html>
