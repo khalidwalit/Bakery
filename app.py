@@ -666,6 +666,7 @@ def getCart():
 
 @app.route('/create_order')
 def create_order():
+    print(session['custID'])
     if 'custID' in session:
         custID = session['custID']  # Assuming you have imported 'current_user' from the appropriate module
         orderID = secrets.token_hex(5)
@@ -674,16 +675,16 @@ def create_order():
             cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
 
             try:
-                insert_order_query = "INSERT INTO `orders` (custID, orderID, orderDate) VALUES (%s, %s, NOW())"
-                cursor.execute(insert_order_query, (custID, orderID))
+                insert_orders_query = "INSERT INTO `orders` (custID, orderID, orderDate) VALUES (%s, %s, NOW())"
+                cursor.execute(insert_orders_query, (custID, orderID))
 
                 for item in orders_items:
-                    product_id = item.get('productID')
+                    productID = item.get('productID')
                     quantity = item.get('quantity')
                     price = item.get('price')
 
-                    insert_orders_items_query = "INSERT INTO `orders_items` (order_id, productId, quantity, price) VALUES (%s, %s, %s, %s)"
-                    cursor.execute(insert_orders_items_query, (cursor.lastrowid, product_id, quantity, price))
+                    insert_orders_items_query = "INSERT INTO `orders_items` (orderID, productID, quantity, price) VALUES (%s, %s, %s, %s)"
+                    cursor.execute(insert_orders_items_query, (cursor.lastrowid, orderID, productID, quantity, price))
 
                 db.connection.commit()
                 session.pop('carts')
@@ -705,34 +706,14 @@ def create_order():
         return redirect(url_for('login'))
 
 
-@app.route('/create_sales')
-def create_sales():
-    cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
-
-    try:
-        # Execute the SQL query
-        cursor.execute("""
-              SELECT * 
-              FROM orders;
-           """)
-
-        # Fetch all the rows
-        sale = cursor.fetchall()
-
-        return render_template('viewRecordSales.html', sale=sale)
-
-    except MySQLdb.Error as e:
-        print(f"Error: {e}")
-
-    finally:
-        cursor.close()
-
-    return "Error occurred. Please try again later."
-
-
 @app.route('/recommendation')
 def recommendation():
     return render_template('recommendation.html')
+
+
+@app.route('/create_sales')
+def create_sales():
+    return render_template('createRecordSales.html')
 
 
 @app.route('/delete')
