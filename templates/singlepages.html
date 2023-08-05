@@ -125,18 +125,20 @@
  {% block content %}
 
 <div class="col-md-6">
-   <div class="product__item__pic set-bg" data-setbg="{{ url_for('static', filename=image_path) }}"></div>
+    <div class="product_item_pic set-bg" data-setbg="{{ url_for('static', filename=image_path) }}"></div>
     <h4>Product Name: {{ product.productName }}</h4>
     <hr>
     <p>Price: {{ product.productPrice }}</p>
     <p>Size: {{ product.productSize }}</p>
     <b>Product Description</b>
     <p>{{ product.productDesc }}</p>
-    <form action="{{url_for('addcart')}}" method="post">
-       <input type="hidden" name="productID" value="{{ product.productID }}">
-        <button type="submit" class="btn btn-sm btn-warning"> Add Cart</button>
-        <label for="">Quantity:</label>
-         <input type="number" name="quantity " id="" value="1" min="1" max="{{ product.productStock }}">
+    <form action="{{ url_for('addcart') }}" method="post">
+        <input type="hidden" name="productID" value="{{ product.productID }}">
+        <input type="hidden" name="productName" value="{{ product.productName }}">
+        <input type="hidden" name="productPrice" value="{{ product.productPrice }}">
+        <button type="submit" class="btn btn-sm btn-warning">Add Cart</button>
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.productStock }}">
     </form>
 </div>
 {% endblock %}

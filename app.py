@@ -3,7 +3,8 @@ import secrets
 
 from MySQLdb._mysql import connection
 import re
-from flask import Flask, render_template, request, redirect, session, url_for, flash, current_app, send_from_directory
+from flask import Flask, render_template, request, redirect, session, url_for, flash, current_app, send_from_directory, \
+    jsonify
 import MySQLdb
 from flask_login import login_required, current_user
 from flask_mysqldb import MySQL
@@ -665,29 +666,43 @@ def getCart():
 
 @app.route('/create_order')
 def create_order():
-    try:
-        custID = current_user.id  # Assuming you have imported 'current_user' from the appropriate module
+    if 'custID' in session:
+        custID = session['custID']  # Assuming you have imported 'current_user' from the appropriate module
+        orderID = secrets.token_hex(5)
         if 'cart' in session:
-            orderID = secrets.token_hex(5)
+            orders_items = session['cart']
+            cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
 
-            # Save each cart item as a separate order record
-            for productID, cart_item in session['carts'].items():
-                order = orders(custID=custID, orderID=orderID, orders=session)
-                db.session.add(order)
+            try:
+                insert_order_query = "INSERT INTO `orders` (custID, orderID, orderDate) VALUES (%s, %s, NOW())"
+                cursor.execute(insert_order_query, (custID, orderID))
 
-            db.session.commit()  # Commit all orders at once after the loop completes
+                for item in orders_items:
+                    product_id = item.get('productID')
+                    quantity = item.get('quantity')
+                    price = item.get('price')
 
-            session.pop('carts')
-            flash('Your order has been sent successfully', 'success')
-            return redirect(url_for('homepage'))
+                    insert_orders_items_query = "INSERT INTO `orders_items` (order_id, productId, quantity, price) VALUES (%s, %s, %s, %s)"
+                    cursor.execute(insert_orders_items_query, (cursor.lastrowid, product_id, quantity, price))
+
+                db.connection.commit()
+                session.pop('carts')
+                flash('Your order has been sent successfully', 'success')
+                return redirect(url_for('homepage'))
+
+            except Exception as e:
+                db.connection.rollback()
+                cursor.close()
+                db.connection.close()
+                return jsonify({'error': str(e)}), 500
+
         else:
             flash('Your cart is empty', 'info')
             return redirect(url_for('getCart'))
 
-    except Exception as e:
-        print(e)
-        flash('Something went wrong', 'danger')
-        return redirect(url_for('getCart'))
+    else:
+        flash('You need to be logged in to place an order', 'info')
+        return redirect(url_for('login'))
 
 
 @app.route('/create_sales')
