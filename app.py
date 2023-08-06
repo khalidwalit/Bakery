@@ -654,10 +654,10 @@ def addcart():
     except Exception as e:
         print(e)
     finally:
-        return redirect("/carts")
+        return redirect("/cart")
 
 
-@app.route('/carts')
+@app.route('/cart')
 def getCart():
     cart = session['cart']
     print(session)
@@ -675,21 +675,21 @@ def create_order():
             cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
 
             try:
-                insert_orders_query = "INSERT INTO `orders` (custID, orderID, orderDate) VALUES (%s, NOW())"
-                cursor.execute(insert_orders_query, (custID))
+                insert_orders_query = "INSERT INTO `orders` (custID,orderDate) VALUES (%s, NOW())"
+                cursor.execute(insert_orders_query, (custID,))
 
                 for item in orders_items:
                     productID = item.get('productID')
-                    quantity = item.get('quantity')
-                    price = item.get('price')
+                    quantity = int(item.get('quantity'))
+                    price = quantity * float(item.get('productPrice'))
 
-                    insert_orders_items_query = "INSERT INTO `orders_items` (orderID, productID, quantity, price) VALUES (%s, %s, %s, %s)"
-                    cursor.execute(insert_orders_items_query, (cursor.lastrowid, orderID, productID, quantity, price))
+                    insert_order_items_query = "INSERT INTO `order_items` (orderID, productID, quantity, price) VALUES (%s, %s, %s, %s)"
+                    cursor.execute(insert_order_items_query, (cursor.lastrowid, productID, quantity, price))
 
                 db.connection.commit()
-                session.pop('carts')
+                session.pop('cart')
                 flash('Your order has been sent successfully', 'success')
-                return redirect(url_for('homepage'))
+                return redirect(url_for('home'))
 
             except Exception as e:
                 print('error')
