@@ -15,13 +15,59 @@
     <!--Product Admin CSS Template https://templatemo.com/tm-524-product-admin-->
 </head>
 <body>
- <div class="container">
-            <div class="row">
-                <div class="col">
-                    <p class="text-white mt-5 mb-5">Welcome back, <b>Admin</b></p>
+<body id="reportsPage">
+    <div class="" id="home">
+        <nav class="navbar navbar-expand-xl">
+            <div class="container h-100">
+                <a class="navbar-brand" href="index.html">
+                    <div>
+                    <a href="./index.html"><img src="{{url_for('static', filename ='BTFlogo.png')}}" style="width:40px;" class="rounded-pill" alt=""></a></div>
+                    <h1 class="tm-site-title mb-0">Admin Page</h1>
+                </a>
+                <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars tm-nav-icon"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-auto h-100">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('dashboard')}}">
+                              <i class="fas fa-columns"></i>Dashboard
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                          <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('view_ingredients')}}">
+                           <i class="fas fa-shopping-cart"></i> Ingredients
+                         </a>
+                        </li>
+                         <li class="nav-item">
+                        <a class="nav-link active" href="{{url_for('create_sales')}}">
+                           <i class="fas fa-tachometer-alt"></i> Report
+                         </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('index_product')}}">
+                                <i class="fas fa-tag"></i>Products
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('profile_admin')}}">
+                               <i class="fas fa-user"></i>Profile
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link d-block" href="{{url_for('index')}}">
+                                Admin, <b>Logout</b>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <!-- row -->
+        </nav>
       <div class="col-12 tm-block-col">
                     <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                         <h2 class="tm-block-title">Sales</h2>
@@ -91,7 +137,6 @@
                     </div>
                 </div>
  </div>
- <a href="{{url_for('dashboard')}}" target="_blank">
-     <button type="submit" class="btn btn-primary">Back</button></a>
+</body>
 </body>
 </html>

@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="zxx">
-
+<html>
 <head>
-    <meta charset="UTF-8">
+      <meta charset="UTF-8">
     <meta name="description" content="Cake Template">
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Create Order</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -26,10 +24,23 @@
     <link rel="stylesheet" href="/static/cake-main/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="/static/cake-main/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/static/cake-main/css/style.css" type="text/css">
+    <title>Single Pages</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
-
 <body>
-    <!-- Offcanvas Menu Begin -->
+ <!-- Offcanvas Menu Begin -->
     <div class="offcanvas-menu-overlay"></div>
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__cart">
@@ -44,12 +55,14 @@
         </div>
         <div class="offcanvas__logo">
             <a href="./index.html"><img src="/static/cake-main/img/logo.png" alt=""></a>
-        </div>
-                <li><a href="{{url_for('customer')}}">Customer</a></li>
-                <li><a href="{{url_for('admin')}}">Admin</a> </li>
+        </div><ul>
+        <li><a href="{{url_for('customer')}}">Customer</a></li>
+        <li><a href="{{url_for('admin')}}">Admin</a></li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" >Cart({{session['Shoppingcart']|length}})</a>
+        </li>
             </ul>
         </div>
-    </div>
     <!-- Offcanvas Menu End -->
 
     <!-- Header Section Begin -->
@@ -61,8 +74,11 @@
                         <div class="header__top__inner">
                             <div class="header__top__left">
                                 <ul>
-                                    <li><a href="{{url_for('customer')}}">Customer </a> </li>
-                                     <li><a href="{{url_for('admin')}}">Admin</a> </li>
+                                    <li> <a href="{{url_for('customer')}}">Customer </a></li>
+                                    <li> <a href="{{url_for('admin')}}">Admin</a></li>
+                                    <li class="nav-item">
+                                     <a class = "nav-link disabled" href="{{url_for('getCart')}}" tabindex="-1">Cart ({{session['Shoppingcart']|length}})</a>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="header__logo">
@@ -98,42 +114,33 @@
                                 </ul>
                             </li>
                             <li><a href="{{url_for('faq')}}">FAQ</a></li>
-                            <li><a href="{{url_for('contact')}}">Contact</a></li>
+                            <li><a href="#">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
             </div>
         </div>
     </header>
-    <!-- Header Section End -->
-<div class="container">
-    <h1>Cart</h1>
+    <br>
+ {% block content %}
+
+<div class="col-md-6">
+    <div class="product_item_pic set-bg" data-setbg="{{ url_for('static', filename=image_path) }}"></div>
+    <h4>Product Name: {{ product.productName }}</h4>
     <hr>
-    <div class="row">
-        <div class="col-md-2">
-            <h4>Product</h4>
-            <img src="{{url_for('static', filename ='cake4.png')}}" class="img-thumbnail" alt="...">
-        </div>
-        <div class="col-md-2">
-            <h4>Price</h4>
-            <p> RM20.00</p>
-        </div>
-        <div class="col-md-2">
-            <h4>Quantity</h4>
-            <p>1</p>
-        </div>
-        <div class="col-md-2">
-            <h4>Total</h4>
-            <p>RM20.00</p>
-        </div>
-        <div class="col-md-2">
-            <h4>Action</h4>
-            <button type="submit" class="btn btn-primary">Remove</button>
-        </div>
-    </div><br><br>
-     <button type="submit" class="btn btn-primary">Continue Shopping</button>
-     <a href="{{url_for('view_order')}}" class="btn btn-block btn-primary">Place Order </a>
-</div><br><br>
-</form>
+    <p>Price: {{ product.productPrice }}</p>
+    <p>Size: {{ product.productSize }}</p>
+    <b>Product Description</b>
+    <p>{{ product.productDesc }}</p>
+    <form action="{{ url_for('addcart') }}" method="post">
+        <input type="hidden" name="productID" value="{{ product.productID }}">
+        <input type="hidden" name="productName" value="{{ product.productName }}">
+        <input type="hidden" name="productPrice" value="{{ product.productPrice }}">
+        <button type="submit" class="btn btn-sm btn-warning">Add Cart</button>
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.productStock }}">
+    </form>
+</div>
+{% endblock %}
 </body>
 </html>

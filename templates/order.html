@@ -1,0 +1,34 @@
+
+{% block content %}
+<div class="container">
+    <div class = "row">
+        <table class="table table-sm">
+            <thead>
+            <th>Name:</th>
+            <th>Price</th>
+            <th>Stock:</th>
+            <th>Total Order</th>
+            </thead>
+
+        <tbody>
+        {% for key , product in session['Shoppingcart'].items() %}
+        <tr>
+            <td>{{loop.product}}</td>
+            <td>{{ product.productName }}</td>
+            <td>{{ product.productPrice }}</td>
+            <td>{{ product.productStock }}</td>
+            <td></td>
+             {% endif %}
+             {% set totalOrder = product.productStock|int * product.productPrice %}
+             <td>{{totalOrder}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td><a href="{{url_for('create_order'}}">Order Now</a> </td>
+            <td colspan="=4"><h5>Total Order:{{totalOrder}}</h5></td>
+        </tr>
+        </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

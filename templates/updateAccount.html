@@ -47,11 +47,9 @@
         <div class="offcanvas__logo">
             <a href="./index.html"><img src="/static/cake-main/img/logo.png" alt=""></a>
         </div>
-                <li><a href="{{url_for('customer')}}">Customer</a></li>
-                <li><a href="{{url_for('admin')}}">Admin</a> </li>
-            </ul>
+                <a href="{{url_for('customer')}}">Customer</a>
+                <a href="{{url_for('admin')}}">Admin</a>
         </div>
-    </div>
     <!-- Offcanvas Menu End -->
     <!-- Header Section Begin -->
     <header class="header">
@@ -107,17 +105,18 @@
         </div>
     </header>
     <!-- Header Section End -->
-
+<br>
 <h4>Update Profile</h4>
+    <hr>
 <form action="{{ url_for('edit') }}" method="post" autocomplete="off" >
     <label>Phone No:</label>
-    <label for="custPhone"></label>{{account['custPhone']}}
-    <input type="number" name="custPhone" placeholder="Phone" id="custPhone" required>
+    <label for="custPhone"></label>
+    <input type="number" name="custPhone" value="{{ account.custPhone }}"placeholder="Phone" id="custPhone" required>
 
     <label>Address:</label>
-    <label for="custAddress"></label>{{account['custAddress']}}
-    <input type="text" name="custAddress" placeholder="Address" id="custAddress" required>
-    <input type="submit" value="Submit"></a>
+    <label for="custAddress"></label>
+    <input type="text" name="custAddress" value="{{ account.custAddress }}" placeholder="Address" id="custAddress" required>
+    <input type="submit" value="Submit">
 </form>
 </body>
 </html>

@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="zxx">
-
+<html>
 <head>
-    <meta charset="UTF-8">
+    <title>Cart</title>
+     <meta charset="UTF-8">
     <meta name="description" content="Cake Template">
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>View Order</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -27,9 +26,8 @@
     <link rel="stylesheet" href="/static/cake-main/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/static/cake-main/css/style.css" type="text/css">
 </head>
-
 <body>
-    <!-- Offcanvas Menu Begin -->
+ <!-- Offcanvas Menu Begin -->
     <div class="offcanvas-menu-overlay"></div>
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__cart">
@@ -45,11 +43,10 @@
         <div class="offcanvas__logo">
             <a href="./index.html"><img src="/static/cake-main/img/logo.png" alt=""></a>
         </div>
-                <li><a href="{{url_for('customer')}}">Customer</a></li>
-                <li><a href="{{url_for('admin')}}">Admin</a> </li>
-            </ul>
+                <a href="{{url_for('customer')}}">Customer</a>
+                <a href="{{url_for('admin')}}">Admin</a>
         </div>
-    </div>
+
     <!-- Offcanvas Menu End -->
 
     <!-- Header Section Begin -->
@@ -61,8 +58,8 @@
                         <div class="header__top__inner">
                             <div class="header__top__left">
                                 <ul>
-                                    <li><a href="{{url_for('customer')}}">Customer </a> </li>
-                                     <li><a href="{{url_for('admin')}}">Admin</a> </li>
+                                    <li><a href="{{url_for('customer')}}">Customer </a></li>
+                                    <li><a href="{{url_for('admin')}}">Admin</a></li>
                                 </ul>
                             </div>
                             <div class="header__logo">
@@ -78,6 +75,7 @@
                                     <a href="#"><img src="/static/cake-main/img/icon/cart.png" alt=""> <span>0</span></a>
                                     <div class="cart__price">Cart: <span>RM0.00</span></div>
                                 </div>
+                                	<a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
                             </div>
                         </div>
                     </div>
@@ -92,47 +90,34 @@
                         <ul>
                             <li><a href="{{url_for('index')}}">Home</a></li>
                             <li><a href="{{url_for('about')}}">About</a></li>
-                              <li><a href="#">Product</a>
+                             <li><a href="#">Product</a>
                                 <ul class="dropdown">
                                     <li><a href="{{url_for('cake')}}">Cakes</a></li>
                                 </ul>
                             </li>
                             <li><a href="{{url_for('faq')}}">FAQ</a></li>
-                            <li><a href="{{url_for('contact')}}">Contact</a></li>
+                            <li><a href="#">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
             </div>
         </div>
     </header>
-    <!-- Header Section End -->
-<div class="container">
-    <h1>Order Details</h1>
-  <h1>Recommendation</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Product Size</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for recommendation in recommendations %}
-            <tr>
-                <td>{{ createorder.productID }}</td>
-                <td>{{ createorder.productName }}</td>
-                <td>{{ createorder.productSize }}</td>
-
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-   <a href="{{url_for('dashboard')}}" target="_blank">
-     <button type="submit" class="btn btn-primary">Back</button></a>
-     <button type="submit" class="btn btn-primary">Delete</button>
-</div>
-</div>
+    <br>
+    <h3>Your Cart</h3>
+    <ul>
+        {% for item in cart %}
+        <li>
+            Product ID: {{ item.productID }}
+            Product Name: {{ item.productName }}
+            Product Size: {{ item.productSize }}
+            Product Price: {{ item.productPrice }}
+        </li>
+        {% endfor %}
+    </ul>
+ <a href="{{url_for('recommend')}}">
+     <button type="submit" class="btn btn-primary">Continue Shopping</button></a>
+ <a href="{{url_for('create_order')}}">
+     <button type="submit" class="btn btn-primary">Confirm order</button></a>
 </body>
 </html>
