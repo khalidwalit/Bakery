@@ -669,14 +669,14 @@ def create_order():
     print(session['custID'])
     if 'custID' in session:
         custID = session['custID']  # Assuming you have imported 'current_user' from the appropriate module
-        orderID = secrets.token_hex(5)
+
         if 'cart' in session:
             orders_items = session['cart']
             cursor = db.connection.cursor(MySQLdb.cursors.DictCursor)
 
             try:
-                insert_orders_query = "INSERT INTO `orders` (custID, orderID, orderDate) VALUES (%s, %s, NOW())"
-                cursor.execute(insert_orders_query, (custID, orderID))
+                insert_orders_query = "INSERT INTO `orders` (custID, orderID, orderDate) VALUES (%s, NOW())"
+                cursor.execute(insert_orders_query, (custID))
 
                 for item in orders_items:
                     productID = item.get('productID')
@@ -692,9 +692,8 @@ def create_order():
                 return redirect(url_for('homepage'))
 
             except Exception as e:
+                print('error')
                 db.connection.rollback()
-                cursor.close()
-                db.connection.close()
                 return jsonify({'error': str(e)}), 500
 
         else:
